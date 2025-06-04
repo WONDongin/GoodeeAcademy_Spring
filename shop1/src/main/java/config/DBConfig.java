@@ -14,17 +14,17 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 @Configuration
 public class DBConfig {
 	@Bean(destroyMethod ="close")
-	public DataSource dataSource() {
-		ComboPooledDataSource ds = new ComboPooledDataSource();
+	public DataSource dataSource() { // Connection 객체
+		ComboPooledDataSource ds = new ComboPooledDataSource(); // 컨넥션풀객체
 		try {
 			ds.setDriverClass("org.mariadb.jdbc.Driver");
 			ds.setJdbcUrl("jdbc:mariadb://localhost:3306/gdjdb");
 			ds.setUser("gduser");
 			ds.setPassword("1234");
-			ds.setMaxPoolSize(20);
-			ds.setMinPoolSize(3);
-			ds.setInitialPoolSize(5);
-			ds.setAcquireIncrement(5);
+			ds.setMaxPoolSize(20);    // 최대 객체의 갯수
+			ds.setMinPoolSize(3);     // 최소 객체의 갯수
+			ds.setInitialPoolSize(5); // 초기화 객체의 갯수
+			ds.setAcquireIncrement(5);// 증가 단위(5개씩)
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
