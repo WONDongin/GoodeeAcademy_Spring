@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
   <display-name>shop1</display-name>
+<!-- 
+Spring 설정
+DispatcherServlet : Spring 환경 설정 서블릿 
+-->
   <servlet>
   	<servlet-name>shop1</servlet-name>
   	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -12,8 +16,10 @@
   		<param-name>contextConfigLocation</param-name>
   		<param-value>config.MvcConfig config.DBConfig</param-value>
   	</init-param>
+  	<!-- 웹어플리케이션 시작하면 서블릿을 객체화(준비완료) -->
   	<load-on-startup>1</load-on-startup>
   </servlet>
+  <!--  모든요청의 파라미터 값의 인코딩 설정 -->
   <filter>
   	<filter-name>encoding</filter-name>
   	<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
