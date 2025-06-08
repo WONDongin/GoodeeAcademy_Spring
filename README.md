@@ -11,4 +11,4 @@ GoodeeAcademy_ Boot Camp_Spring
 - 4주차 : 
 
 ## Blog
-[https://dongin97.tistory.com/](https://dongin97.tistory.com)
+[https://dongin97.tistory.com/category/SpringBoot](https://dongin97.tistory.com/category/SpringBoot)
