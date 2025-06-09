@@ -3,6 +3,7 @@ package dao;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.Valid;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,28 @@ public class UserDao {
 		param.clear();
 		param.put("userid", userid);
 		return template.selectOne("dao.mapper.UserMapper.select",param);
+	}
+
+	public void update(User user) {
+		template.getMapper(cls).update(user);
+	}
+
+	public void delete(String userid) {
+		template.getMapper(cls).delete(userid);
+	}
+
+	public void chgpass(String userid, String chgpass) {
+		template.getMapper(cls).chgpass(userid, chgpass);
+	}
+
+	public String search(User user) {
+		String col = "userid"; // 아이디 검색
+		if(user.getUserid() != null) col = "password"; // 비밀번호 찾기
+		param.clear();
+		param.put("col", col);
+		param.put("userid", user.getUserid());
+		param.put("email", user.getEmail());
+		param.put("phoneno", user.getPhoneno());
+		return template.getMapper(cls).search(param);
 	}
 }
