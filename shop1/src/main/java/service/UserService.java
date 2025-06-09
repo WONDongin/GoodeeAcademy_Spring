@@ -17,4 +17,20 @@ public class UserService {
 	public User selectUser(String userid) {
 		return userdao.selectOne(userid);
 	}
+
+	public void userUpdate(User user) {
+		userdao.update(user);
+	}
+
+	public void userDelete(String userid) {
+		userdao.delete(userid);
+	}
+
+	public void userChgpass(String userid, String chgpass) {
+		userdao.chgpass(userid, chgpass);
+	}
+
+	public String getSearch(User user) {
+		return userdao.search(user);
+	}
 }

@@ -61,7 +61,7 @@ public class MvcConfig implements WebMvcConfigurer {
 	public SimpleMappingExceptionResolver exceptionHandler() {
 		SimpleMappingExceptionResolver ser = new SimpleMappingExceptionResolver();
 		Properties pr = new Properties();
-		// 에러 발생시 exception 페이지로 전달
+		// 에러 발생시 exception.jsp 페이지로 전달
 		pr.put("exception.ShopException", "exception");
 		ser.setExceptionMappings(pr);
 		return ser;
