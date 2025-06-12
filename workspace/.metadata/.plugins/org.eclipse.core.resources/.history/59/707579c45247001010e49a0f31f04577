@@ -1,0 +1,6 @@
+package kr.gdu.controller;
+
+@Controller
+public class BoardController {
+
+}

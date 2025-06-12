@@ -1,0 +1,17 @@
+spring.application.name=shop2
+# port 지정. 기본 8080
+# server.port=8080
+
+# mariadb
+spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+spring.datasource.url=jdbc:mariadb://localhost:3306/gdjdb
+spring.datasource.username=gduser
+spring.datasource.password=1234
+
+# hikari 설정부분
+spring.datasource.hikari.auto-commit=true
+spring.datasource.hikari.read-only=false
+spring.datasource.hikari.connection-timeout=3000
+spring.datasource.hikari.minimum-idle=5
+spring.datasource.hikari.max-lifetime=240000
+spring.datasource.hikari.maximum-pool-size=20**

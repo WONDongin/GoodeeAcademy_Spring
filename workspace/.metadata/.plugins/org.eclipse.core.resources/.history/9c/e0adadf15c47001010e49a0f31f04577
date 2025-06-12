@@ -1,0 +1,19 @@
+package kr.gdu.dao.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import kr.gdu.logic.Board;
+
+@Mapper
+public interface BoardMapper {
+	String select = "select num, writer, pass, title, content, file1 fileurl,"
+			+ " regdate, readcnt, grp, grplevel, grpstep, boardid from board";
+	@Select({"<script>",
+		"select "})
+	int count(Map<String, Object> param);
+
+	List<Board> select(Map<String, Object> param);
+}

@@ -1,0 +1,5 @@
+package kr.gdu.dao;
+
+public class BoardDao {
+
+}

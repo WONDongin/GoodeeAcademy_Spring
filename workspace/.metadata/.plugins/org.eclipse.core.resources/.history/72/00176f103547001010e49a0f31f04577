@@ -1,0 +1,3 @@
+spring.application.name=shop2
+# port 지정. 기본 8080(없어도 ) 
+server.port=8080

@@ -1,0 +1,13 @@
+package kr.gdu.service;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class BoardService {
+
+	public int boardcount(String boardid, String searchtype, String searchcontent) {
+		
+		return 0;
+	}
+
+}

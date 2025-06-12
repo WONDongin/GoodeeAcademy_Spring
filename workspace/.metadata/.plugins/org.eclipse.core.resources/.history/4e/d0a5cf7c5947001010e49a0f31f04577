@@ -1,0 +1,14 @@
+package kr.gdu.dao;
+
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class BoardDao {
+	@Autowired
+	private SqlSessionTemplate template;
+	private Class<BoardMapper> cls = BoardMapper.class;
+	private Map<String,Object> param = new HashMap<>
+	
+}

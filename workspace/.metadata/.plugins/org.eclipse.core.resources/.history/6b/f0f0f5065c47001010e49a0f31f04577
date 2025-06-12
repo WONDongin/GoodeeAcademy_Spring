@@ -1,0 +1,17 @@
+package kr.gdu.dao.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import kr.gdu.logic.Board;
+
+@Mapper
+public interface BoardMapper {
+
+	int count(Map<String, Object> param);
+
+	List<Board> select(Map<String, Object> param);
+
+}
