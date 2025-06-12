@@ -1,0 +1,8 @@
+package kr.gdu.logic;
+
+import lombok.Data;
+
+@Data
+public class Board {
+
+}

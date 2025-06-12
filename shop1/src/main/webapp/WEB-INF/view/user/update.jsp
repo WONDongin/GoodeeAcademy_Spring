@@ -22,8 +22,7 @@
     </font>
  </spring:hasBindErrors>
  <table>
-	<tr>
-	<td width="10%">아이디</td><td><form:input path="userid" readonly="true" class="w3-input"/>
+   <tr><td width="10%">아이디</td><td><form:input path="userid" readonly="true" class="w3-input"/>
         <font color="red"><form:errors path="userid" /></font></td></tr>
    <tr><td>비밀번호</td><td><form:password path="password" class="w3-input"/>
         <font color="red"><form:errors path="password" /></font></td></tr>

@@ -1,0 +1,94 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<c:set var="path" value="${pageContext.request.contextPath}" />
+<!DOCTYPE html>
+<html>
+<head>
+<title>W3.CSS Template</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
+.mySlides {display: none}
+</style>
+</head>
+<body class="w3-content w3-border-left w3-border-right">
+
+<!-- Top menu on small screens -->
+<header class="w3-bar w3-top w3-hide-large w3-black w3-xlarge">
+  <span class="w3-bar-item">Rental</span>
+  <a href="javascript:void(0)" class="w3-right w3-bar-item w3-button" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+</header>
+
+<sitemesh:write property="title" />
+
+<div class="w3-main w3-white">
+	
+	<a href="${path}/board/list?boardid=1"
+	   class="w3-bar-item w3-button w3-padding">
+	   <i class="fa fa-eye fa-fw"></i>&nbsp; 공지사항
+	</a>
+
+	<a href="${path}/board/list?boardid=2"
+	   class="w3-bar-item w3-button w3-padding">
+	   <i class="fa fa-eye fa-fw"></i>&nbsp; 자유게시판
+	</a>
+
+	<a href="${path}/board/list?boardid=3"
+	   class="w3-bar-item w3-button w3-padding">
+	   <i class="fa fa-eye fa-fw"></i>&nbsp; QnA
+	</a>
+
+
+  <!-- Slideshow Header -->
+  <a herf>
+  <div class="w3-container" id="apartment">
+	<sitemesh:write property="head" />
+  </div>
+  
+  <!-- Contact -->
+  <div class="w3-container" id="contact">
+	<sitemesh:write property="body" />
+  </div>
+  
+  <footer class="w3-container w3-padding-16" style="margin-top:32px">푸터</footer>
+
+<!-- End page content -->
+</div>
+
+<script>
+
+var slideIndex = 1;
+showDivs(slideIndex);
+
+function plusDivs(n) {
+  showDivs(slideIndex += n);
+}
+
+function currentDiv(n) {
+  showDivs(slideIndex = n);
+}
+
+function showDivs(n) {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("demo");
+  if (n > x.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = x.length}
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" w3-opacity-off", "");
+  }
+  x[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " w3-opacity-off";
+}
+</script>
+
+</body>
+</html>
