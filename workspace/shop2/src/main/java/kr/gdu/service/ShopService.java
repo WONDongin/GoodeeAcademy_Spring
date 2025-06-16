@@ -3,8 +3,7 @@ package kr.gdu.service;
 import java.io.File;
 import java.util.List;
 
-
-import javax.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 import kr.gdu.dao.ItemDao;
 import kr.gdu.dao.SaleDao;
 import kr.gdu.dao.SaleItemDao;
-import jakarta.servlet.http.HttpServletRequest;
 import kr.gdu.logic.Cart;
 import kr.gdu.logic.Item;
 import kr.gdu.logic.ItemSet;

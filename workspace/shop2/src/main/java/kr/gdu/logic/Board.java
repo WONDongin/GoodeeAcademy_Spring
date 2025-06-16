@@ -1,8 +1,8 @@
 package kr.gdu.logic;
 
-import java.sql.Date;
+import java.util.Date;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,9 +21,10 @@ public class Board {
 	@NotEmpty(message="내용을 입력하세요")
 	private String content;
 	private MultipartFile file1;
-	private String fileurl;
+	private String fileurl; //파일 이름
 	private Date regdate;
 	private int readcnt;
 	private int grp;
 	private int grplevel;
+	private int grpstep;
 }

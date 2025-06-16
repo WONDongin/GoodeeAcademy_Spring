@@ -3,8 +3,8 @@ package kr.gdu.controller;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-
-import javax.validation.Valid;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import jakarta.servlet.http.HttpSession;
 import kr.gdu.exception.ShopException;
 import kr.gdu.logic.Sale;
 import kr.gdu.logic.User;

@@ -30,7 +30,7 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	   $("#"+tab).addClass("select")
    }
    function list_disp(id) {
-	   $("#"+id).toggle()
+	   $("#"+id).toggle() //show인 경우 hide, hide인 경우 show
    }
 </script>
 <style type="text/css">
@@ -53,7 +53,7 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <tr><td align="center">
 <a href="javascript:list_disp('saleLine${stat.index}')">${sale.saleid}</a></td>
 <td align="center"><fmt:formatDate value="${sale.saledate}" 
-        pattern="yyyy-MM-dd"/></td>
+        pattern="yyyy-MM-dd HH:mm:ss"/></td>
 <td align="right">
 <fmt:formatNumber value="${sale.total}" pattern="###,###" />원</td></tr>
 <tr id="saleLine${stat.index}" class="saleLine">
@@ -73,13 +73,11 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
  <table>
    <tr><td>아이디</td><td>${user.userid}</td></tr>
    <tr><td>이름</td><td>${user.username}</td></tr>   
-   <tr><td>우편번호</td><td>${user.postcode}</td></tr>
-   <tr><td>주소</td><td>${user.address}</td></tr>     
+   <tr><td>우편번호</td><td>${user.postcode}</td></tr>   
    <tr><td>전화번호</td><td>${user.phoneno}</td></tr>   
    <tr><td>이메일</td><td>${user.email}</td></tr>   
    <tr><td>생년월일</td>
-   <td><fmt:formatDate value="${user.birthday}" pattern="yyyy-MM-dd"/></td></tr> 
-  
+   <td><fmt:formatDate value="${user.birthday}" pattern="yyyy-MM-dd"/></td></tr>   
  </table><br>
  <a href="logout">[로그아웃]</a>&nbsp;
  <a href="update?userid=${user.userid}">[회원정보수정]</a>&nbsp;
@@ -89,5 +87,8 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
  </c:if>
  <c:if test="${loginUser.userid == 'admin'}">
  <a href="../admin/list">[회원목록]</a>&nbsp;
+ <%--
+    회원 목록 완성하기    
+  --%>
  </c:if> 
  </div></body></html>

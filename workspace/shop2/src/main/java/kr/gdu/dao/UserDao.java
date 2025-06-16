@@ -25,7 +25,8 @@ public class UserDao {
 	public User selectOne(String userid) {
 		param.clear();
 		param.put("userid", userid);
-		return template.selectOne("kr.gdu.dao.mapper.UserMapper.select",param);
+		return template.selectOne
+				("kr.gdu.dao.mapper.UserMapper.select",param);
 	}
 
 	public void update(User user) {
