@@ -65,7 +65,7 @@
 	    // file : images[i]
 	    function sendFile(file){
 	        // 파일 업로드를 위한 데이터 컨테이너 생성
-	        let data = new FormData(); // ← 오타 수정됨
+	        let data = new FormData();
 	        data.append("image", file); // 컨테이너에 이미지 객체 추가
 	
 	        $.ajax({
@@ -75,7 +75,7 @@
 	            processData : false,
 	            contentType : false,
 	            success : function(src){
-	                $("#summernote").summernote("insertImage", src); // ← 오타 수정됨
+	                $("#summernote").summernote("insertImage", src);
 	            },
 	            error : function(e){
 	                alert("이미지 업로드 실패 : " + e.status);

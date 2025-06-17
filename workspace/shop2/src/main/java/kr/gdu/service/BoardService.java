@@ -1,8 +1,22 @@
 package kr.gdu.service;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -107,12 +121,201 @@ public class BoardService {
 		File dir = new File(UPLOAD_IMAGE_DIR + "board/image");
 		if(!dir.exists()) dir.mkdirs();
 		String filesystemName = multipartFile.getOriginalFilename();
+		// File(dir,filesystemName) : dir 폴더에 filesystemName 이름의 파일
 		File file = new File(dir,filesystemName);
 		try {
-			multipartFile.transferTo(file);
+			multipartFile.transferTo(file); // 이미지 업로드
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return "/board/image/" + filesystemName; // url 리턴
 	}
+	
+	// 시,군,동
+	public String sidoSelect1(String si, String gu) {
+	    BufferedReader fr = null;
+	    String path = UPLOAD_IMAGE_DIR + "data/sido.txt";
+	    try {
+	        fr = new BufferedReader(new FileReader(path));
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    Set<String> set = new LinkedHashSet<>();
+	    String data = null;
+	    if (si == null && gu == null) {
+	        try {
+	            while ((data = fr.readLine()) != null) {
+	                String[] arr = data.split("\\s+");
+	                if (arr.length >= 3) set.add(arr[0].trim());
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    List<String> list = new ArrayList<>(set);
+		return list.toString(); // [서울특별시, 경기도, ...]
+	}
+	
+	public List<String> sigunSelect2(String si, String gu) {
+		BufferedReader fr = null;
+		String path = UPLOAD_IMAGE_DIR + "data/sido.txt";
+		try {
+			fr = new BufferedReader(new FileReader(path));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Set<String> set = new LinkedHashSet<>();
+		String data = null;
+		if(si == null && gu == null) {
+			try {
+				while((data=fr.readLine()) != null){
+					String[] arr = data.split("\\s+");
+					if(arr.length >= 3) set.add(arr[0].trim());
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else if(gu == null) { // 시도를 선택한 경우. 서울특별시, 경기도...
+			si = si.trim();
+			try {
+				while((data = fr.readLine()) != null) {
+					String[] arr = data.split("\\s+");
+					if(arr.length >= 3 && arr[0].equals(si) && !arr[1].contains(arr[0])) {
+						set.add(arr[1].trim());
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else { // 구,군을 선택한 경우
+			si = si.trim();
+			gu = gu.trim();
+			try {
+				while ((data = fr.readLine()) != null) {
+					String[] arr = data.split("\\s+");
+					if(arr.length >= 3 && arr[0].equals(si) && arr[1].equals(gu) && !arr[0].equals(arr[1]) && !arr[2].contains(arr[1])) {
+						if(arr.length > 3) {
+							if(arr[3].contains(arr[1])) continue;
+							arr[2] += " " + arr[3];
+						}
+						set.add(arr[2].trim());
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		List<String> list = new ArrayList<>(set);
+		return list;
+	}
+	
+	// 메인로고
+	public String mainLogo() {
+	    Document doc = null;
+	    String url = "https://gudi.kr/";
+	    String exdate = null;
+	    try {
+	        doc = Jsoup.connect(url).get();
+	        Elements imgs = doc.select("img.normal_logo");
+	        if (!imgs.isEmpty()) {
+	            // 첫 번째 요소만 가져옴
+	            exdate = imgs.get(0).outerHtml();
+	        }
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	    return exdate;
+	}
+
+	
+	// 수출입은행 환율정보 조회하기
+	public String exchange1() {
+		Document doc = null;
+		List<List<String>> trlist = new ArrayList<>();
+		String url = "https://www.koreaexim.go.kr/wg/HPHKWG057M01";
+		String exdate = null;
+		try {
+			doc = Jsoup.connect(url).get();
+			Elements trs = doc.select("tr");            // tr 태그 목록
+			exdate = doc.select("p.table-unit").html(); // 조회기준일
+			for(Element tr : trs) {
+				List<String> tdlist = new ArrayList<>();
+				Elements tds = tr.select("td"); // tr 태그 내부의 td 태그 목록
+				for(Element td : tds) {
+					// td.html() : td 태그의 내용들
+					tdlist.add(td.html()); // [USD, 미국달러, 1350...,]
+				}
+				if (tdlist.size() > 0) {
+				    String first = tdlist.get(0);
+				    if (first.equals("USD") || first.equals("CNH") || first.equals("JPY(100)") || first.equals("EUR")) {
+				    	trlist.add(tdlist);
+				    	// trlist : USD,CNH,JPY,EUR 통화코드가 속한 데이터만 저장
+				    }
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		StringBuilder sb = new StringBuilder();
+		sb.append("<h4 class='w3-center'>수출입은행<br>" + exdate + "</h4>");
+		sb.append("<table class='w3-table-all'>");
+		sb.append("<tr><th>통화</th><th>기준율</th><th>받으실때</th><th>보내실때</th></tr>");
+		for(List<String> tds : trlist) {
+			sb.append("<tr><td>" + tds.get(0) + "<br>" + tds.get(1) + "</td><td>" + tds.get(4) + "</td>");
+			sb.append("<td>" + tds.get(2) + "</td><td>" + tds.get(3) + "</td></tr>");
+		}
+		sb.append("</table>");
+		return sb.toString();
+	}
+	
+	// 수출입은행 환율정보 조회하기
+	public Map<String, Object> exchange2() {
+		Document doc = null;
+		List<List<String>> trlist = new ArrayList<>();
+		String url = "https://www.koreaexim.go.kr/wg/HPHKWG057M01";
+		String exdate = null;
+		try {
+			// DOM
+			doc = Jsoup.connect(url).get();
+			Elements trs = doc.select("tr");            // tr 태그 목록
+			exdate = doc.select("p.table-unit").html(); // 조회기준일
+			for(Element tr : trs) {
+				// Elements : tr 태그 모두
+				// Element : tr 태그 한개
+				List<String> tdlist = new ArrayList<>();
+				Elements tds = tr.select("td"); // tr 태그 내부의 td 태그 목록
+				for(Element td : tds) {
+					// td.html() : td 태그의 내용들
+					tdlist.add(td.html()); // [USD, 미국달러, 1350...,]
+				}
+				if (tdlist.size() > 0) {
+				    String first = tdlist.get(0);
+				    if (first.equals("USD") || first.equals("CNH") || first.equals("JPY(100)") || first.equals("EUR")) {
+				    	trlist.add(tdlist);
+				    	// trlist : USD,CNH,JPY,EUR 통화코드가 속한 데이터만 저장
+				    }
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Map<String, Object> map = new HashMap<>();
+		map.put("exdate", exdate); // 조회기준일
+		map.put("trlist", trlist); // 4개 통화 데이터
+		return map;
+	}
+	
+	// 그래프
+	public Map<String, Integer> graph1(String id) {
+		List<Map<String, Object>> list = boardDao.graph1(id);
+		Map<String, Integer> map = new HashMap<>();
+		for(Map<String, Object> m : list) {
+			String writer = (String) m.get("writer");
+			long cnt = (Long) m.get("cnt");
+			map.put(writer, (int) cnt);
+		}
+		return map;
+	}
+	
 }

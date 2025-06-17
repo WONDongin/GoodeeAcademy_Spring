@@ -56,5 +56,10 @@ public interface BoardMapper {
     @Update("update board set grpstep=grpstep + 1"
     	      + " where grp = #{grp} and grpstep > #{grpstep}")
     void grpStepAdd(Map<String, Object> param);
+    
+    // 그래프
+    @Select("select writer, count(*) cnt from board where boardid=#{id} "
+    		+ " group by writer order by 2 desc limit 0, 7")
+	List<Map<String, Object>> graph1(String id);
 
 }
