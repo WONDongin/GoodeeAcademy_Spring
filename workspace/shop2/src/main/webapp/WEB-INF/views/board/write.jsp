@@ -32,6 +32,8 @@
 	        $("#summernote").summernote({
 	            height: 300,
 	            callbacks : {
+	            	// onImageUpload : 이미지 업로드 이벤트
+	            	// images : 선택한 이미지들
 	                onImageUpload : function(images){
 	                    for(let i = 0; i < images.length; i++){
 	                        sendFile(images[i]);
@@ -41,22 +43,23 @@
 	        });
 	    });
 	
-	    // file : images[i]
+	    // file : images[i] 이미지 데이터
 	    function sendFile(file){
 	        // 파일 업로드를 위한 데이터 컨테이너 생성
-	        let data = new FormData(); // ← 오타 수정됨
+	        let data = new FormData();
 	        data.append("image", file); // 컨테이너에 이미지 객체 추가
 	
 	        $.ajax({
-	            url : "/ajax/uploadImage",
-	            type : "post",
-	            data : data,
-	            processData : false,
-	            contentType : false,
-	            success : function(src){
-	                $("#summernote").summernote("insertImage", src); // ← 오타 수정됨
+	            url : "/ajax/uploadImage", // 서버 요청 url
+	            type : "post",             // post방식으로 요청
+	            data : data,               // 전송 데이터
+	            processData : false,       // 문자열 전송아님, 파일 업로드시 사용
+	            contentType : false,       // 컨텐츠 타입 자동 설정 안함. 파일 업로드시 사용
+	            success : function(src){   // 서버 응답 완료. 정상처리
+	                $("#summernote").summernote("insertImage", src); 
+	            	// <img src="/board/image/파일명..">
 	            },
-	            error : function(e){
+	            error : function(e){ // 서버 응답 오류
 	                alert("이미지 업로드 실패 : " + e.status);
 	            }
 	        });

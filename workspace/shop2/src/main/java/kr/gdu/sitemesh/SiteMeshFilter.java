@@ -18,7 +18,8 @@ public class SiteMeshFilter extends ConfigurableSiteMeshFilter {
 	protected void applyCustomConfiguration(SiteMeshFilterBuilder builder) {
 		builder.addDecoratorPath("/*", "layout/gdulayout.jsp")
 		.addExcludedPath("/user/idsearch*")
-		.addExcludedPath("/user/pwsearch*");
+		.addExcludedPath("/user/pwsearch*")
+		.addExcludedPath("/ajax/*"); // ajax의 모든 요청은 sitemesh 제외시킴
 	}
 	@Override
 	public void doFilter(ServletRequest servletRequest, 
