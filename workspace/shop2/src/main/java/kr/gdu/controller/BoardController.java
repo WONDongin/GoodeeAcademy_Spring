@@ -3,8 +3,6 @@ package kr.gdu.controller;
 import java.util.List;
 import java.util.Map;
 
-import kr.gdu.service.ShopService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -109,10 +107,10 @@ public class BoardController {
 		else if(board.getBoardid().equals("3"))
 			mav.addObject("boardName","QNA");
 		
-		// 댓글 목록 화면에 전달
-		// commlist : num 게시글물의 댓글목록
-		List<Comment> commlist = service.commentList(num);
-		// 유효성 검증에 필요한 Comment 객체
+	    //댓글 목록 화면에 전달
+		//commlist : num 게시물의 댓글 목록
+	    List<Comment> commlist = service.commentlist(num);
+		//유효성 검증에 필요한 Comment 객체
 		Comment comm = new Comment();
 		comm.setNum(num);
 		mav.addObject("board",board);
@@ -178,6 +176,9 @@ public class BoardController {
 			return mav;
 		}
 		Board dbboard = service.getBoard(board.getNum());
+		//비밀번호 검증
+		//board.getPass() : 화면 입력 비밀번호
+		//dbboard.getPass() : db에 등록된 비밀번호
 		if(!board.getPass().equals(dbboard.getPass())) {
 			bresult.reject("error.check.password");
 			return mav;
@@ -191,74 +192,69 @@ public class BoardController {
 		}
 		return mav;
 	}
-	
 	/*
-	1. 유효성 검사하기-파라미터값 저장.
-	     - 원글정보 : num, grp, grplevel, grpstep, boardid
-	     - 답글정보 : writer, pass, title, content
-	2. db에 insert => service.boardReply()
-	     - 원글의 grpstep 보다 큰 기존 등록된 답글의 grpstep 값을 +1 수정
-	       => boardDao.grpStepAdd()
-	     - num : maxNum() + 1
-	     - db에 insert => boardDao.insert()
-	       grp : 원글과 동일
-	       grplevel : 원글의 grplevel + 1
-	       grpstep : 원글의 grpstep + 1
-	3. 등록 성공 : list로 페이지 이동
-	   등록 실패 : "답변 등록시 오류 발생" reply 페이지 이동
-	*/
+	 * 1. 유효성 검사하기-파라미터값 저장. 
+	 *     - 원글정보 : num,grp,grplevel,grpstep,boardid
+	 *     - 답글정보 : writer,pass,title,content
+	 * 2. db에 insert => service.boardReply()
+	 *     - 원글의 grpstep 보다 큰 기존 등록된 답글의 grpstep 값을 +1 수정 
+	 *       => boardDao.grpStepAdd()
+	 *     - num : maxNum() + 1  
+	 *     - db에 insert  => boardDao.insert()
+	 *       grp : 원글과 동일
+	 *       grplevel : 원글의 grplevel + 1    
+	 *       grpstep : 원글의 grpstep + 1
+	 * 3. 등록 성공 : list로 페이지 이동
+	 *    등록 실패 : "답변 등록시 오류 발생" reply 페이지 이동           
+	 */		
 	@PostMapping("reply")
 	public ModelAndView reply(@Valid Board board, BindingResult bresult) {
 		ModelAndView mav = new ModelAndView();
-		// 유효성 검증
-		if (bresult.hasErrors()) {
+		//유효성 검증
+    	if(bresult.hasErrors()) {
 			return mav;
-		}
-		try {// 정상작동 (list 페이지 이동)
-			service.boardReply(board);
-			mav.setViewName("redirect:list?boardid=" + board.getBoardid());
-		} catch (Exception e) { // 오류발생(reply 페이지 이동)
-			e.printStackTrace();
-			String url ="reply?num=" + board.getNum()+"&boardid=" + board.getBoardid();
-			throw new ShopException("답변등록시 오류발생", url);
-		}
-		return mav;
+    	}
+    	try {
+     	   service.boardReply(board);
+     	   mav.setViewName("redirect:list?boardid="+board.getBoardid());
+     	} catch(Exception e) {
+     		e.printStackTrace();
+     		String url = "reply?num="+board.getNum()+
+     				    "&boardid=" + board.getBoardid();
+     		throw new ShopException("답변등록시 오류 발생",url);
+     	}
+ 	    return mav;    	
 	}
-	// 댓글등록
-	@RequestMapping("comment")
-	public ModelAndView comment(@Valid Comment comm, BindingResult bresult) {
+	@RequestMapping("comment")  //댓글 등록
+	public ModelAndView comment(@Valid Comment comm,BindingResult bresult) {
 		ModelAndView mav = new ModelAndView("board/detail");
 		if(bresult.hasErrors()) {
-			// 입력 오류시, 정상적으로 조회 되도록 수정
-			return commdeteil(comm); 
+			//입력 오류시, 정상적으로 조회 되도록 수정
+			return commdetail(comm);
 		}
-		// comment 테이블의 기본키값 : num, seq
-		int seq = service.commmaxseq(comm.getNum()); // num 게시글 중 최대 seq값
+		//comment 테이블의 기본키값: num,seq
+		int seq = service.commmaxseq(comm.getNum()); //num 게시글 중 최대 seq값
 		comm.setSeq(++seq);
-		service.comminsert(comm); // comment 테이블에 추가
-		// 댓글 입력시 댓글창 위치로 포커스 이동
-		mav.setViewName("redirect:detail?num=" + comm.getNum() + "#comment");
-		return mav;
+		service.comminsert(comm); //comment 테이블에 추가
+		mav.setViewName("redirect:detail?num="+comm.getNum()+"#comment");
+		return mav;		
 	}
-	private ModelAndView commdeteil(Comment comm) {
-		// 조회수가 증가됨. 수정필요
-		ModelAndView mav = detail(comm.getNum());
-		// comm : @Valid 완료한 객체. 오류 정보 저장
+	private ModelAndView commdetail(Comment comm) {
+		ModelAndView mav = detail(comm.getNum()); //조회수가 증가됨. 수정 필요
+		//comm : @Valid 완료한 객체. 오류 정보 저장
 		mav.addObject(comm);
+		mav.setViewName("board/detail");
 		return mav;
 	}
-	
-	// 댓글삭제
 	@RequestMapping("commdel")
 	public String commdel(Comment comm) {
-		// dbcomm : 삭제할 답글 선택
-		Comment dbcomm = service.commSelectOne(comm.getNum(), comm.getSeq());
-		// 해당 댓글 비밀번호 비교
-		if(comm.getPass().equals(dbcomm.getPass())) { // 비밀번호 일치
-			service.commdel(comm.getNum(), comm.getSeq());
-		}else { // 비밀번호 불일치
-			throw new ShopException("댓글 삭제 실패.", "detail?num=" + comm.getNum() + "#comment");
+		Comment dbcomm = service.commSelectOne(comm.getNum(),comm.getSeq());
+		if(comm.getPass().equals(dbcomm.getPass())) {
+			service.commdel(comm.getNum(),comm.getSeq());
+		} else {
+			throw new ShopException("댓글 삭제 실패.",
+					"detail?num="+comm.getNum()+"#comment");
 		}
-		return "redirect:detail?num=" + comm.getNum() + "#comment";
+		return "redirect:detail?num="+comm.getNum()+"#comment";
 	}
 }

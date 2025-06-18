@@ -57,17 +57,16 @@ public class BoardDao {
 	public void delete(int num) {
 		template.getMapper(cls).delete(num);
 	}
-	
-	// 답변기능
 	public void grpStepAdd(Board board) {
-	    Map<String, Object> param = new HashMap<>();
-	    param.put("grp", board.getGrp());
-	    param.put("grpstep", board.getGrpstep());
-	    template.getMapper(cls).grpStepAdd(param);
+		param.clear();
+		param.put("grp", board.getGrp());         //원글의 grp
+		param.put("grpstep", board.getGrpstep()); //원글의 grpstep
+		template.getMapper(cls).grpStepAdd(param);		
 	}
-	
-	// 그래프
 	public List<Map<String, Object>> graph1(String id) {
-		return  template.getMapper(cls).graph1(id);
+		return template.getMapper(cls).graph1(id);
 	}
+	public List<Map<String, Object>> graph2(String id) {
+		return template.getMapper(cls).graph2(id);
+	}	
 }

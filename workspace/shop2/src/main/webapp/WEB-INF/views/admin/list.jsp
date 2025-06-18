@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>   
-<%-- /WEB-INF/view/admin/list.jsp --%>
+<%-- /WEB-INF/views/admin/list.jsp --%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,13 +19,10 @@
 </head>
 <body>
 <h2>회원목록</h2>
-<form action="mailForm" method="post">
-  <table>
-  <tr><th>아이디</th>
-      <th>이름</th>
-      <th>전화</th>
-      <th>생일</th>
-      <th>이메일</th>
+<form action="mail" >
+  <table class="w3-table-all">
+  <tr><th>아이디</th><th>이름</th><th>전화</th><th>생일</th><th>이메일</th>
+  <th>&nbsp;</th>
   <th><input type="checkbox" name="allchk" onchange="allchkbox(this)"></th></tr>
   <c:forEach items="${list}" var="user">
   <tr><td>${user.userid}</td><td>${user.username}</td><td>${user.phoneno}</td>
@@ -34,7 +31,8 @@
   <a href="../user/update?userid=${user.userid}">수정</a>
   <a href="../user/delete?userid=${user.userid}">강제탈퇴</a>
   <a href="../user/mypage?userid=${user.userid}">회원정보</a></td>
-  <td><input type="checkbox" name="idchks" class="idchks" value="${user.userid}"></td></tr>
+  <td><input type="checkbox" name="idchks" class="idchks" 
+      value="${user.userid}"></td></tr>
   </c:forEach>
   <tr><td colspan="7"><input type="submit" value="메일보내기"></td></tr>
   </table></form></body></html>

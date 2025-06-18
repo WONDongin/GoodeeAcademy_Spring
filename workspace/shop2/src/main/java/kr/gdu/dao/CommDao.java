@@ -16,8 +16,8 @@ public class CommDao {
 	@Autowired
 	private SqlSessionTemplate template;
 	private Map<String,Object> param = new HashMap<>();
-	private Class<CommentMapper> cls = CommentMapper.class;
-	// 댓글 기능
+    private Class<CommentMapper> cls = CommentMapper.class;
+    
 	public List<Comment> list(Integer num) {
 		return template.getMapper(cls).list(num);
 	}
@@ -25,14 +25,13 @@ public class CommDao {
 		return template.getMapper(cls).maxseq(num);
 	}
 	public void insert(Comment comm) {
-		 template.getMapper(cls).insert(comm);
+		template.getMapper(cls).insert(comm);
 	}
-	// 삭제할 댓글 선택
 	public Comment selectOne(int num, int seq) {
-		return  template.getMapper(cls).selectOne(num, seq);
+		return template.getMapper(cls).selectOne(num,seq);
 	}
-	// 댓글삭제
 	public void delete(int num, int seq) {
-		template.getMapper(cls).delete(num, seq);
+		template.getMapper(cls).delete(num,seq);
 	}
+	
 }

@@ -51,15 +51,23 @@ public interface BoardMapper {
 
     @Delete("delete from board where num = #{num}")
 	void delete(int num);
-    
-    // 답글기능
-    @Update("update board set grpstep=grpstep + 1"
-    	      + " where grp = #{grp} and grpstep > #{grpstep}")
-    void grpStepAdd(Map<String, Object> param);
-    
-    // 그래프
-    @Select("select writer, count(*) cnt from board where boardid=#{id} "
-    		+ " group by writer order by 2 desc limit 0, 7")
-	List<Map<String, Object>> graph1(String id);
 
+    @Update("update board set grpstep=grpstep + 1" 
+            + " where grp = #{grp} and grpstep > #{grpstep}")
+	void grpStepAdd(Map<String, Object> param);
+/*
+ * [{writer="홍길동",cnt:10 },{writer="김삿갓",cnt:7 },..]
+ * =>[{홍길동=10},{김삿갓=7},... ] 형식으로 브라우저에 전달
+ */
+    @Select("select writer,count(*) cnt from board where boardid=#{value} "
+    		+ " group by writer order by 2 desc limit 0,7")
+	List<Map<String, Object>> graph1(String id);
+    
+    // [{day=2025-06-05,cnt=5},{day=2025-06-04,cnt=7},...]
+    @Select("select date_format(regdate,'%Y-%m-%d') day, count(*) cnt "
+    		+ " from board "
+            + " where boardid=${value} "
+            + " group by date_format(regdate,'%Y-%m-%d') "
+            + "   order by day desc limit 0,7")
+	List<Map<String, Object>> graph2(String id);
 }

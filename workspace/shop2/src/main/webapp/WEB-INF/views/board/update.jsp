@@ -21,7 +21,7 @@
    <font color="red"><form:errors path="pass" /></font></td></tr>
    <tr><td>제목</td><td><form:input path="title" />
    <font color="red"><form:errors path="title" /></font></td></tr>
-   <tr><td>내용</td><td><form:textarea path="content" rows="15" cols="80" id="summernote" />
+   <tr><td>내용</td><td><form:textarea path="content" rows="15" cols="80" id="summernote"/>
    <font color="red"><form:errors path="content" /></font></td></tr>
    <tr><td>첨부파일</td>
        <td><c:if test="${!empty board.fileurl}">
@@ -32,39 +32,38 @@
    <form:hidden path="fileurl"/><input type="file" name="file1"></td></tr>
    <tr><td colspan="2"><a href="javascript:document.f.submit()">[게시글수정]</a>
        <a href="list">[게시글목록]</a></td></tr></table></form:form>
-	<script type="text/javascript">
-	    $(function(){
-	        $("#summernote").summernote({
-	            height: 300,
-	            callbacks : {
-	                onImageUpload : function(images){
-	                    for(let i = 0; i < images.length; i++){
-	                        sendFile(images[i]);
-	                    }
-	                }
-	            }
-	        });
-	    });
-	
-	    // file : images[i]
-	    function sendFile(file){
-	        // 파일 업로드를 위한 데이터 컨테이너 생성
-	        let data = new FormData(); // ← 오타 수정됨
-	        data.append("image", file); // 컨테이너에 이미지 객체 추가
-	
-	        $.ajax({
-	            url : "/ajax/uploadImage",
-	            type : "post",
-	            data : data,
-	            processData : false,
-	            contentType : false,
-	            success : function(src){
-	                $("#summernote").summernote("insertImage", src); // ← 오타 수정됨
-	            },
-	            error : function(e){
-	                alert("이미지 업로드 실패 : " + e.status);
-	            }
-	        });
-	    }
-	</script>      
+<script type="text/javascript">
+<script type="text/javascript">
+$(function(){
+	  $("#summernote").summernote({
+		  height:300,
+		  callbacks : {
+			  onImageUpload : function(images) {
+				  for(let i=0;i < images.length;i++) {
+					  sendFile(images[i])
+				  }
+			  }
+		  }
+	  })
+})
+function sendFile(file) {
+	  //파일 업로드를 위한 데이터 컨테이너 생성
+	  let data = new FormData();
+	  data.append("image",file); //컨테이너에 이미지 객체 추가
+	  $.ajax({ //ajax을 이용하여 파일 업로드
+		  url : "/ajax/uploadImage",//서버 요청 url
+		  type : "post",            //post 방식으로 요청
+		  data : data,              //전송 데이터
+		  processData : false,      //문자열 전송 아님. 파일 업로드시 사용
+		  contentType : false,      //컨텐트 타입 자동 설정 안함.파일 업로드시 사용 
+		  success : function(src) { //서버 응답 완료. 정상 처리
+			  console.log(src);
+			  $("#summernote").summernote("insertImage",src);
+		  },
+		  error : function(e) { //서버 응답 오류. 
+			  alert("이미지 업로드 실패:" + e.status)
+		  }
+	  })
+}
+</script></script>
 </body></html>

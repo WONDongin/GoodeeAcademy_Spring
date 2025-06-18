@@ -30,4 +30,5 @@ function win_open(page) {
 <input type="button" value="아이디찾기" onclick="win_open('idsearch')">
 <input type="button" value="비밀번호찾기" onclick="win_open('pwsearch')">
 </td></tr></table>
+<a href="${apiURL}"><img height="30" src="http://static.nid.naver.com/oauth/small_g_in.PNG"></a>
 </form:form></body></html>

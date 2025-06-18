@@ -55,4 +55,10 @@ public class UserDao {
 	public List<User> list() {
 		return template.getMapper(cls).select(null);
 	}
+
+	public List<User> list(String[] idchks) {
+		param.clear();
+		param.put("userids", idchks);
+		return template.getMapper(cls).select(param);
+	}
 }
