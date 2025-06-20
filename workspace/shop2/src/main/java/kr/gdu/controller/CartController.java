@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,8 +20,14 @@ import kr.gdu.service.ShopService;
 @Controller
 @RequestMapping("cart")
 public class CartController {
+
+    private final AdminController adminController;
 	@Autowired
 	private ShopService service;
+
+    CartController(AdminController adminController) {
+        this.adminController = adminController;
+    }
 	/*
 	 * 문제
 	 * 1.  
@@ -89,6 +96,28 @@ public class CartController {
 		session.removeAttribute("CART"); //장바구니 제거
 		mav.addObject("sale",sale);
 		return mav;
+	}
+	
+	// 카카오 결제
+	@RequestMapping("kakao")
+	@ResponseBody // View 없이 바로 데이터를 클라이언트로 전송
+	public Map<String, Object> kakao(HttpSession session){
+		Map<String, Object> map = new HashMap<>();
+		Cart cart = (Cart) session.getAttribute("CART");
+		User loginUser = (User) session.getAttribute("loginUser");
+		// merchant_uid : 주문의 고유 아이디. 
+		map.put("merchant_uid", loginUser.getUserid() + "-" + session.getId());
+		// 상품명
+		map.put("name", cart.getItemSetList().get(0).getItem().getName() + "외" + (cart.getItemSetList().size() - 1));
+		// 전체 주문금액
+		map.put("amount", cart.getTotal());
+		// 구매자의 이메일,이름,휴대폰번호,주소,postcode
+		map.put("buyer_email", loginUser.getEmail());
+		map.put("buyer_name", loginUser.getUsername());
+		map.put("buyer_tel", loginUser.getPhoneno());
+		map.put("buyer_addr", loginUser.getAddress());
+		map.put("buyer_postcode", loginUser.getPostcode());
+		return map;
 	}
 	
 }

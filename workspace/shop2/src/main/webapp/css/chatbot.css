@@ -1,0 +1,80 @@
+
+#gptanswerarea {
+   height : 350px;
+   overflow: auto;
+}
+
+.chatbot .chat {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px;
+}
+
+.chatbot .chat.me .icon {
+    position: relative;
+    overflow: hidden;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #F9EB54;
+}
+.chatbot .chat.bot .icon {
+    position: relative;
+    overflow: hidden;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #ddd;
+}
+.chatbot .chat .icon i {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    font-size: 1.5rem;
+    color: #aaa;
+    transform: translateX(-50%);
+}
+
+.chatbot .chat .textbox {
+    position: relative;
+    display: inline-block;
+    max-width: calc(100% - 70px);
+    padding: 10px;
+    margin-top: 0px;
+    font-size: 13px;
+    border-radius: 10px;
+    text-align: left;
+}
+.chatbot .chat .textbox::before {
+    position: absolute;
+    display: block;
+    top: 0;
+    font-size: 1rem;
+}
+
+.chatbot .bot .textbox {
+    margin-left: 10px;
+    background-color: #ddd;
+}
+
+.chatbot .bot .textbox::before {
+    left: -10px;
+    content: "◀";
+    color: #ddd;
+}
+
+.chatbot .me {
+    flex-direction: row-reverse;
+}
+
+.chatbot .me .textbox {
+    margin-right: 10px;
+    background-color: #F9EB54;
+}
+
+.chatbot .me .textbox::before {
+    right: -10px;
+    content: "▶";
+    color: #F9EB54;
+}
+
