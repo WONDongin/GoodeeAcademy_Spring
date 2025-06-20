@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import kr.gdu.dao.BoardDao;
 import kr.gdu.dao.CommDao;
 import kr.gdu.logic.Board;

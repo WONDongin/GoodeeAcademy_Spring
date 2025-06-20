@@ -3,6 +3,7 @@ package kr.gdu.controller;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -24,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kr.gdu.service.BoardService;
+import kr.gdu.service.ChatBotService;
 /*
  * @Controller : @Component + Controller 기능
  *     Mapping 메서드의 리턴 타입 : ModelAndView : 뷰이름 + 데이터
@@ -39,6 +41,9 @@ import kr.gdu.service.BoardService;
 @RestController
 @RequestMapping("ajax")
 public class AjaxController {
+	@Autowired
+	ChatBotService chatService;
+	 
 	@Autowired
 	BoardService service;
 
@@ -108,6 +113,19 @@ public class AjaxController {
 	   List<Map.Entry<String, Integer>> list =  
 			                 new ArrayList<>(map.entrySet());
 	   return list;	 //[{2025-06-05=5},{2025-06-04=7},....]              
+	}
+	
+	// gpt
+	@PostMapping("gptquestion")
+	public String gptquestion (String question) {
+		String response = null;
+		try {
+			response = chatService.getChatGPTResponse(question);
+		} catch (URISyntaxException | IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
+		System.out.println(response);
+		return response;
 	}
 	
 }

@@ -12,8 +12,10 @@ import kr.gdu.websocket.EchoHandler;
 @EnableWebSocket  //웹소켓 처리.
 public class WebSocketConfig implements WebSocketConfigurer{
   @Override
-  public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-	registry.addHandler(new EchoHandler(),"chatting")
-	.setAllowedOrigins("*"); 
-  }
+  	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+	  // chatting : 웹소켓에서 호출되는 url 정보
+	  // ws://localhost:8080/chatting
+	  registry.addHandler(new EchoHandler(),"chatting")
+	  .setAllowedOrigins("*"); 
+  	}
 }
