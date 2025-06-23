@@ -39,7 +39,7 @@
                 gptquestion();
             }
         });
-
+		// gptquestion : 질문내용
         function gptquestion() {
             let question = document.querySelector("#gpt_question").value.trim();
 
@@ -68,10 +68,10 @@
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
                 cache: "no-cache",
-                referrerPolicy: "no-referrer",
+                refer0rerPolicy: "no-referrer",
                 body: "question=" + encodeURIComponent(question)
             };
-
+			// jquery 방식이 아니고, ES6버전으로 서버에 요청
             fetch('/ajax/gptquestion', paramdata)
                 .then(response => response.text())
                 .then(gptdata => {
