@@ -1,38 +1,30 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8">
-<title>상품 삭제 전 확인</title></head>
+<html xmlns:th="http://www.thymeleaf.org" 
+th:replace="~{/layout/layout :: layout(~{::title}, ~{::body}, ~{::style})}">
+<head>
+<meta charset="UTF-8">
+<title>상품 상세보기</title>
+</head>
 <body>
-<h2>상품 삭제 전 확인</h2>
+<h2>상품 상세 보기</h2>
 <table>
-	<tr><td><img th:src="@{'../img/' + ${item.pictureUrl}}"></td>
+<tr><td><img th:src="@{'../img/' + ${item.pictureUrl}}"></td>
   <td>
   <table>
-<tr><td>상품명</td><td th:text="${item.name}"></td></tr>
-<tr><td>가격</td><td th:text="${item.price}"></td></tr>
-<tr><td>상품설명</td><td th:text="${item.description}"></td></tr>
-<tr><td colspan="2">
-    <form action="../cart/cartAdd">
-        <input type="hidden" name="id" value="${item.id}">
-        <table>
-            <tr>
-                <td>
-                    <select name="quantity">
-                        <option th:each="i : ${#numbers.sequence(1,10)}">
-                            <th:block th:text="${i}"></th:block>
-                        </option>
-                    </select>
-                </td>
-                <td>
-                    <input type="submit" value="장바구니"/>
-                    <input type="button" value="상품목록" onclick="location.href='list'">
-                </td>
-            </tr>
-        </table>
-    </form>
-</td></tr>
-</table>
-</td>
-</tr>
-</table>
-</body></html>
+     <tr><td>상품명</td><td th:text="${item.name}"></td></tr>
+     <tr><td>가격</td><td th:text="${item.price}"></td></tr>
+     <tr><td>상품설명</td><td th:text="${item.description}"></td></tr>
+     <tr><td colspan="2">
+       <form action="../cart/cartAdd">
+         <input type="hidden" name="id" value="${item.id}">
+         <table><tr><td><select name="quantity">
+            <option th:each="i : ${#numbers.sequence(1,10)}">
+              <th:block th:text="${i}"></th:block></option>
+         </select></td>
+         <td><input type="submit" value="장바구니">
+         <input type="button" value="상품목록" onclick="location.href='list'">
+         </td></tr></table></form>
+     </td></tr></table>
+  </td></tr></table>
+  </body>
+</html>

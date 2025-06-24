@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<title>상품 삭제 전 확인</title></head>
+<body>
+<h2>상품 삭제 전 확인</h2>
+<table>
+  <tr><td><img th:src="@{'../img/'+${item.pictureUrl}}"></td>
+  <td><table>
+    <tr><td>상품명</td><td th:text="${item.name}"></td></tr>
+    <tr><td>가격</td><td th:text="${item.price}"></td></tr>
+    <tr><td>상품설명</td><td th:text="${item.description}"></td></tr>
+    <tr><td colspan="2">
+      <form action="delete" method="post">
+         <input type="hidden" name="id" th:value="${item.id}">
+         <input type="submit" value="상품삭제">
+         <input type="button" value="상품목록" onclick="location.href='list'">
+      </form>
+    </td></tr></table></td></tr></table></body></html>
