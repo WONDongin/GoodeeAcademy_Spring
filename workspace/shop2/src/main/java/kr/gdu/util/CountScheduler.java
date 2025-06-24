@@ -79,7 +79,7 @@ public class CountScheduler {
 	 *        edate varchar(10)
 	 *    )
 	 */ 
-	@Scheduled (cron="0 30 10 * * 1,2,3,4,5")
+	@Scheduled (cron="0 49 10 * * 1,2,3,4,5")
 	public void exchange() {
 		service.exchangeCreate();
 	}
