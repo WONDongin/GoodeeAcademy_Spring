@@ -7,7 +7,7 @@ GoodeeAcademy_ Boot Camp_Spring
 ## 1M(Spring) 
 - 1주차 : lombok, maven, 상품 목록(cotroller/dao/mapper), 로그인, 회원가입, 내정보수정, 탈퇴, ID/PW 찾기
 - 2주차 : API(네이버로그인, 결제모듈, ChatGPT)
-- 3주차 : e
+- 3주차 : 
 - 4주차 : 
 
 ## Blog
