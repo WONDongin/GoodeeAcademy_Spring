@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+th:replace="~{/layout/layout :: layout(~{::title}, ~{::body}, ~{::style})}">
+<head>
+<meta charset="UTF-8">
+<title>mypage</title>
+<style type="text/css">
+  .select {  padding:3px;   background-color: #0000ff;  }
+  .select>a { color : #ffffff;   text-decoration: none; font-weight: bold;}
+  .title { text-decoration: none; }
+</style>
+</head>
+<body>
+<table class="w3-table">
+ <tr><td id="tab1" class="tab">
+ <!--
+   session.loginUser.userid : session.loginUser null인경우 오류발생  
+  -->
+ <a href="javascript:disp_div('minfo','tab1')" class="title">회원정보</a></td>
+     <td id="tab2" class="tab"
+th:if="${session.loginUser != null && session.loginUser.userid != 'admin'}">
+ <a href="javascript:disp_div('oinfo','tab2')"  class="title">주문정보</a></td>
+   </tr></table>
+<div id="oinfo" class="info" style="display:none; width:100%;">
+<table class="w3-table"><tr><th>주문번호</th><th>주문일자</th><th>주문금액</th></tr>
+<th:block th:each="sale, stat : ${salelist}">
+<tr th:if="${salelist != null}" >
+<td align="center">
+<a th:href="|javascript:list_disp(&#39;saleLine${stat.index}&#39;)|">
+    <span th:text="${sale.saleid}"></span></a>
+</td><td align="center">
+  <span th:text="${#dates.format(sale.saledate, 'yyyy-MM-dd HH:mm:ss')}"></span>
+</td>
+<td align="right">
+<span th:text="${#numbers.formatInteger(sale.total, 3, 'COMMA')}">0</span>원
+</td></tr>
+<tr th:id="|saleLine${stat.index}|" class="saleLine">
+ <td colspan="3" align="center">
+ <table class="w3-table"><tr><th>상품명</th><th>상품가격</th><th>주문수량</th><th>상품총액</th></tr>
+   <th:block th:if="${sale != null && sale.itemList != null}">
+   <tr  th:each="saleItem : ${sale.itemList}">
+       <td class="title" th:text="${saleItem.item.name}"></td>
+       <td><span th:text=
+"${#numbers.formatDecimal(saleItem.item.price, 0, 'COMMA', 0, 'POINT')}">0</span>원</td>
+       <td th:text="${saleItem.quantity}"></td>
+       <td><span th:text=
+"${#numbers.formatInteger(saleItem.item.price * saleItem.quantity, 3, 'COMMA')}">0</span></td>
+     </tr>
+   </th:block>       
+   </table>
+ </td></tr>
+ </th:block>
+ </table></div>
+ <div id="minfo" class="info"><table class="w3-table">
+   <tr><td>아이디</td><td th:text="${user.userid}"></td></tr>
+   <tr><td>이름</td><td th:text="${user.username}"></td></tr>   
+   <tr><td>우편번호</td><td th:text="${user.postcode}"></td></tr>   
+   <tr><td>전화번호</td><td th:text="${user.phoneno}"></td></tr>   
+   <tr><td>이메일</td><td th:text="${user.email}"></td></tr>   
+   <tr><td>생년월일</td>
+   <td><span th:text="${#dates.format(user.birthday, 'yyyy-MM-dd')}"></span></td></tr>   
+ </table><br>
+ <a href="logout">[로그아웃]</a>&nbsp;
+ <a th:href="@{update(userid=${user.userid})}">[회원정보수정]</a>&nbsp;
+ <a href="password">[비밀번호수정]</a>&nbsp;
+ <span th:if="${session.loginUser.userid != 'admin'}">
+    <a th:href="@{delete(userid=${user.userid})}">[회원탈퇴]</a>&nbsp;
+ </span>
+<span th:if="${session.loginUser.userid == 'admin'}">
+ <a href="../admin/list">[회원목록]</a>&nbsp;
+</span></div>
+<script type="text/javascript">
+   $(function(){
+	   $("#minfo").show()
+	   $("#oinfo").hide()
+	   $(".saleLine").each(function(){  
+		   $(this).hide()
+	   })
+	   $("#tab1").addClass("select") 
+   })
+   function disp_div(id,tab) {
+	   $(".info").each(function() {
+		   $(this).hide()
+	   })
+	   $(".tab").each(function() {
+		   $(this).removeClass("select")
+	   })
+	   $("#"+id).show()
+	   $("#"+tab).addClass("select")
+   }
+   function list_disp(id) {
+	   $("#"+id).toggle() //show인 경우 hide, hide인 경우 show
+   }
+</script>
+
+</body></html>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" 
-th:replace="~{/layout/layout :: layout(~{::title}, ~{::body}, ~{::style})}">
+   th:replace=
+  "~{/layout/layout :: layout(~{::title}, ~{::body}, ~{::style})}">
 <head>
 <meta charset="UTF-8">
 <title>상품 상세보기</title>
@@ -16,7 +17,7 @@ th:replace="~{/layout/layout :: layout(~{::title}, ~{::body}, ~{::style})}">
      <tr><td>상품설명</td><td th:text="${item.description}"></td></tr>
      <tr><td colspan="2">
        <form action="../cart/cartAdd">
-         <input type="hidden" name="id" value="${item.id}">
+         <input type="hidden" name="id" th:value="${item.id}">
          <table><tr><td><select name="quantity">
             <option th:each="i : ${#numbers.sequence(1,10)}">
               <th:block th:text="${i}"></th:block></option>

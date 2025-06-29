@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head><meta charset="UTF-8">
+<title>아이디 비밀번호 찾기</title>
+<script th:inline="javascript">
+   function sendclose() {
+	   opener.document.loginform.userid.value=[[${result}]];
+	   self.close();
+   }
+</script></head>
+<body><table>
+  <tr><th><span th:text="${title}"></span> : </th>
+      <td th:text="${result}"></td></tr>
+  <tr><td colspan="2">
+     <th:block th:if="${title=='아이디'}">
+        <input type="button" value="아이디전송" onclick="sendclose()">
+     </th:block>
+     <th:block th:if="${title!='아이디'}">
+      <input type="button" value="닫기" onclick="self.close()">
+      </th:block>
+      </td></tr>
+</table></body></html>

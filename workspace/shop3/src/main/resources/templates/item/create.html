@@ -1,55 +1,30 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" 
-th:replace="~{/layout/layout :: layout(~{::title}, ~{::body}, ~{::style})}">
-<head>
-    <meta charset="UTF-8">
-    <title>상품등록</title>
+   th:replace=
+  "~{/layout/layout :: layout(~{::title}, ~{::body}, ~{::style})}">
+<head><meta charset="UTF-8">
+<title>상품등록</title>
 </head>
 <body>
-    <form method="POST" th:object="${item}" action="create" enctype="multipart/form-data">
-        <h2>상품등록</h2>
-        <table>
-            <tr>
-                <td>상품명</td>
-                <td>
-                    <input type="text" name="name" th:field="*{name}" />
-                </td>
-                <td th:if="${#fields.hasErrors('name')}" 
-                    th:errors="*{name}" 
-                    class="w3-text-red">name</td>
-            </tr>
-            <tr>
-                <td>상품가격</td>
-                <td>
-                    <input type="text" name="price" th:field="*{price}" />
-                </td>
-                <td th:if="${#fields.hasErrors('price')}" 
-                    th:errors="*{price}" 
-                    class="w3-text-red">price</td>
-            </tr>
-            <tr>
-                <td>상품이미지</td>
-                <td colspan="2">
-                    <input type="file" name="picture" />
-                </td>
-            </tr>
-            <tr>
-                <td>상품설명</td>
-                <td>
-                    <textarea name="description" cols="20" rows="5"
-                              th:field="*{description}"></textarea>
-                </td>
-                <td th:if="${#fields.hasErrors('description')}" 
-                    th:errors="*{description}" 
-                    class="w3-text-red">description</td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    <input type="submit" value="상품등록" />
-                    <input type="button" value="상품목록" onclick="location.href='list'" />
-                </td>
-            </tr>
-        </table>
-    </form>
-</body>
-</html>
+<form  th:object="${itemDto}" action="create" enctype="multipart/form-data"
+    method="post">
+<h2>상품등록</h2>
+<table>
+<tr><td>상품명</td>
+    <td><input type="text" name="name" th:field="*{name}"/></td>
+    <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}" 
+    class="w3-text-red">name</td></tr>
+<tr><td>상품가격</td>
+    <td><input type="text" name="price" th:field="*{price}"/></td>
+    <td th:if="${#fields.hasErrors('price')}" th:errors="*{price}" 
+    class="w3-text-red">price</td></tr>
+<tr><td>상품이미지</td>
+    <td colspan="2"><input type="file" name="picture"></td></tr>
+<tr><td>상품설명</td>
+    <td><textarea name="description" cols="20" rows="5" 
+       th:field="*{description}"></textarea></td>
+   <td th:if="${#fields.hasErrors('description')}" th:errors="*{description}" 
+    class="w3-text-red">price</td></tr>
+<tr><td colspan="3"><input type="submit" value="상품등록">
+  <input type="button" value="상품목록" onclick="location.href='list'"></td></tr>    
+</table></form></body></html>

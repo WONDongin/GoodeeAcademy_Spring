@@ -7,6 +7,7 @@ import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.List;
 
@@ -16,7 +17,6 @@ import jakarta.validation.Valid;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
 
 import kr.gdu.exception.ShopException;
 import kr.gdu.logic.Sale;
@@ -73,46 +72,46 @@ public class UserController {
 		mav.setViewName("redirect:login");
 		return mav;
 	}
-	
-	
-	// 네이버 로그인
 	/*
-	
-	*/
-	@GetMapping("login")
+	 * 1. /WEB-INF/views/user/login.jsp 페이지 출력
+	 * 2. 네이버 로그인 link 생성
+	 */
+	@GetMapping("login") 
 	public ModelAndView loginForm(HttpSession session) {
 		ModelAndView mav = new ModelAndView();
-		String clientId = "네이버의 client Id";
-		clientId  = "mCI9ZLong1JvedaQfBXS";
+		String clientId="네이버의 client Id";
 		String redirectURL = null;
 		try {
-			// 콜백URL 설정 => 네이버에서 정상처리로 결정되면 호출해주는 URL
-			redirectURL = URLEncoder.encode("http://localhost:8080/user/naverlogin", "UTF-8");
-		} catch (UnsupportedEncodingException e) {
+			//콜백URL 설정 => 네이버에서 정상처리로 결정되면 호출해주는 URL
+			redirectURL = URLEncoder.encode
+					   ("http://localhost:8080/user/naverlogin","UTF-8");
+		} catch(UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 		SecureRandom random = new SecureRandom();
-		// 130자리 임의의 큰 정수 값
-		String state = new BigInteger(130, random).toString();
-		String apiURL = "https://nid.naver.com/oauth2.0/authorize?response_type=code";
-		apiURL += "&client_id=" + clientId;
-		apiURL += "&redirect_uri=" + redirectURL;
-		apiURL += "&state=" + state;
+		//130자리 임의의 큰정수값
+		String state = new BigInteger(130,random).toString();
+		
+		String apiURL = 
+		 "https://nid.naver.com/oauth2.0/authorize?response_type=code";
+		apiURL += "&client_id="+clientId;
+		apiURL += "&redirect_uri="+redirectURL;
+		apiURL += "&state="+state;
 		mav.addObject(new User());
-		mav.addObject("apiURL", apiURL);
-		session.getServletContext().setAttribute("session", session);
-		System.out.println("1.session.id=" + session.getId());
+		mav.addObject("apiURL",apiURL);
+		session.getServletContext().setAttribute("session",session);
+		System.out.println("1.session.id="+session.getId());
 		return mav;
 	}
 	
 	/*
 		1. userid 맞는 User를 db에서 조회하기
-		2. 	비밀번호 검증  
-	   		일치 : session.setAttribute("loginUser",dbUser) => 로그인 정보
-	   		불일치 : 비밀번호를 확인하세요. 출력 (error.login.password)
+		2. 비밀번호 검증  
+		   일치 : session.setAttribute("loginUser",dbUser) => 로그인 정보
+		   불일치 : 비밀번호를 확인하세요. 출력 (error.login.password)
 		3. 비밀번호 일치하는 경우 mypage로 페이지 이동 => 404 오류 발생 (임시)
 	 */
-	@PostMapping("login") // 기존 로그인
+	@PostMapping("login") //db의 내용으로 기본 로그인 방식
 	public ModelAndView login(User user,BindingResult bresult,
 			HttpSession session) {
 		// session : 세션 객체 제공
@@ -144,116 +143,114 @@ public class UserController {
 			bresult.reject("error.login.password");
 			return mav;
 		}
-		return mav;
+	return mav;
 	}
-	
-	// 브라우저 전달 : session (기존 로그인 후 새창으로 네이버 로그인 시 같은 세션)
-	// 네이버 전달 : code, state
 	@RequestMapping("naverlogin")
 	public String naverlogin(String code, String state, HttpSession session) {
-		System.out.println("2.session.id=" + session.getId());
-		String clientId = "클라이언트 아이디값"; // 애플리케이션 클라이언트 아이디값
-		clientId = "mCI9ZLong1JvedaQfBXS";
-		String clientSecret = "클라이언트 시크릿값"; // 애플리케이션 클라이언트 시크릿값
-		clientSecret = "BwN_7QgKRT";
-		String redirectURL = null;
+		System.out.println("2.session.id="+session.getId());
+		String clientId = "클라이언트 아이디값";//애플리케이션 클라이언트 아이디값";
+		String clientSecret = "클라이언트 시크릿값";//애플리케이션 클라이언트 시크릿값";
+ 	    String redirectURI=null;
 		try {
-			redirectURL = URLEncoder.encode("YOUR_CALLBACK_URL", "UTF-8");
+			redirectURI = URLEncoder.encode("YOUR_CALLBACK_URL", "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		String apiURL;
-		apiURL = "https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&";
-		apiURL += "client_id=" + clientId;
-		apiURL += "&client_secret=" + clientSecret;
-		apiURL += "&redirect_uri=" + redirectURL;
-		apiURL += "&code=" + code;  // 네이버에서 전달해준 파라미터 값
-		apiURL += "&state=" + state;// 네이버에서 전달해준 파라미터 값. 초기에는 로그인
-		System.out.println("code=" + code + ", state=" + state);
-//		String access_token = "";
-//		String refresh_token = "";
-		StringBuilder res = new StringBuilder();
-		System.out.println("apiURL=" + apiURL);
-		try {
-			URL url = new URL(apiURL);
-			// apiURL 연결 성공
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-			con.setRequestMethod("GET");
-			// 네이버에서 전달한 응답 코드
-			int responseCode = con.getResponseCode();
-			BufferedReader br;        // 네이버의 응답 메서지 저장
-			if(responseCode == 200) { // 정상 호출
-				br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			} else { // 에러발생
-				br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-			}
-			String inputLine;
-			while ((inputLine = br.readLine()) != null) {
-				res.append(inputLine);
-			}
-			br.close();
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-		// 네이버의 응답 형식 : JSON 형식
-		// JSON 형태의 문자열 데이터 -> json 객체로 변경하기 위한 객체 생성
-		JSONParser parser = new JSONParser(); // pom.xml에 추가
-		JSONObject json= null;
-		try {
-			json = (JSONObject) parser.parse(res.toString());
+		 String apiURL;
+		 apiURL = 
+     "https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&";
+		 apiURL += "client_id=" + clientId;
+		 apiURL += "&client_secret=" + clientSecret;
+		 apiURL += "&redirect_uri=" + redirectURI;
+		 apiURL += "&code=" + code;  //네이버에서 전달해준 파라미터값
+		 apiURL += "&state=" + state; //네이버에서 전달해준 파라미터값. 초기에는 로그인 시작시 개발자가 전달한 임의의 수
+		 System.out.println("code="+code+",state="+state);
+//		 String access_token = "";
+//		 String refresh_token = "";
+		 StringBuffer res = new StringBuffer();
+		 System.out.println("apiURL="+apiURL);
+		 try {
+		      URL url = new URL(apiURL);
+		      HttpURLConnection con = //apiURL 연결 성공
+		    		  (HttpURLConnection)url.openConnection();
+		      con.setRequestMethod("GET");
+		      //네이버에서 전달한 응답 코드
+		      int responseCode = con.getResponseCode();
+		      BufferedReader br; //네이버의 응답 메세지 저장
+		      if(responseCode==200) { // 정상 호출
+		        br = new BufferedReader
+		        		(new InputStreamReader(con.getInputStream()));
+		      } else {  // 에러 발생
+		        br = new BufferedReader
+		        		(new InputStreamReader(con.getErrorStream()));
+		      }
+		      String inputLine;
+		      while ((inputLine = br.readLine()) != null) {
+		        res.append(inputLine);
+		      }
+		      br.close();
+		 } catch (Exception e) {
+		      System.out.println(e);
+		 }
+		 // 네이버의 응답 형식 : JSON 형식
+		 // JSON 형태의 문자열 데이터 => json 객체로 변경하기 위한 객체 생성
+		 JSONParser parser = new JSONParser(); //pom.xml에 추가
+		 JSONObject json=null;
+		 try {
+			json = (JSONObject)parser.parse(res.toString());
+		 } catch (ParseException e) {
+			e.printStackTrace();
+		 }
+		 String token = (String)json.get("access_token");//네이버가 전달해준 토큰
+		 String header = "Bearer " + token; //한개의 공백 필요
+		 try {
+		    apiURL = "https://openapi.naver.com/v1/nid/me";
+		    URL url = new URL(apiURL);
+		    HttpURLConnection con = (HttpURLConnection)url.openConnection();
+		    con.setRequestMethod("GET");
+		    con.setRequestProperty("Authorization", header);
+		    int responseCode = con.getResponseCode();
+		    BufferedReader br;
+		    res = new StringBuffer();
+		    if(responseCode==200) {
+		        br = new BufferedReader
+		        		(new InputStreamReader(con.getInputStream()));
+		    } else { 
+		        br = new BufferedReader
+		        		(new InputStreamReader(con.getErrorStream()));
+		    }
+		    String inputLine;
+		    while ((inputLine = br.readLine()) != null) {
+		        res.append(inputLine);
+		    }
+		    br.close();
+		 } catch (Exception e) {
+			 e.printStackTrace();
+		 }
+		 //res : 로그인한 사용자의 정보 전달. JSON 형식으로 전달
+		 System.out.println("네이버 최종 응답 res="+res);
+		 try {
+			json = (JSONObject)parser.parse(res.toString());
 		} catch (ParseException e) {
 			e.printStackTrace();
+			throw new ShopException("네이버 로그인시 오류 발생","login");
 		}
-		// 네이버가 전달해준 토근
-		String token = (String) json.get("access_token");
-		String header = "Bearer " + token; // 한개의 공백 필요
-		try {
-			apiURL = "https://openapi.naver.com/v1/nid/me";
-			URL url = new URL(apiURL);
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-			con.setRequestMethod("GET");
-			con.setRequestProperty("Authorization", header);
-			int responseCode = con.getResponseCode();
-			BufferedReader br;
-			res = new StringBuilder();
-			if(responseCode == 200) { // 정상작동
-				br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			} else {
-				br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			}
-			String inputLine;
-			while ((inputLine = br.readLine()) != null) {
-				res.append(inputLine);
-			}
-			br.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		// res : 로그인한 사용자의 정보 전달. JSON 형식으로 전달
-		System.out.println("네이버 최종응답 : " + res);
-		try {
-			json  = (JSONObject) parser.parse(res.toString());
-		} catch (ParseException e) {
-			e.printStackTrace();
-			throw new ShopException("네이버 로그인시 오류 발생", "login");
-		}
-		JSONObject jsondetail = (JSONObject) json.get("response");
-		String userid = jsondetail.get("id").toString(); // 네이버에서 전달해준 사용자 ID값
-		User user = service.selectUser(userid);          // 
-		if (user == null) { // 처음 로그인한 경우
-		    user = new User();
-		    user.setUserid(userid);
-		    user.setUsername(jsondetail.get("name").toString());
-		    String email = jsondetail.get("email").toString();
-		    user.setEmail(email);
-		    user.setPhoneno(jsondetail.get("mobile").toString());
-		    user.setChannel("naver"); // 현재 DB의 컬럼에서 빠짐
-		    service.userInsert(user);
+		JSONObject jsondetail = (JSONObject)json.get("response");
+		String userid = jsondetail.get("id").toString(); //네이버에서 전달해준 ID값
+		User user = service.selectUser(userid); //
+		if (user == null) { //처음 로그인한 경우
+			user = new User();
+			user.setUserid(userid);
+			user.setUsername(jsondetail.get("name").toString());
+			String email = jsondetail.get("email").toString();
+			user.setEmail(email);
+			user.setPhoneno(jsondetail.get("mobile").toString());
+			user.setChannel("naver");//현재는 db의 컬럼에서 빠짐
+			service.userInsert(user);
 		}
 		session.setAttribute("loginUser", user);
-		return "redirect:mypage?userid=" + user.getUserid();
+		return "redirect:mypage?userid="+user.getUserid();
 	}
-
 	
 	/*
 	 * AOP 설정필요 : UserLoginAspect 클래스의 userIdCheck 메서드로 구현

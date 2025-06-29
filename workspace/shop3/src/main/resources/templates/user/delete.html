@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+th:replace="~{/layout/layout :: layout(~{::title}, ~{::body}, ~{::style})}">
+<head><meta charset="UTF-8">
+<title>회원탈퇴</title></head><body>
+<table>
+  <tr><td>아이디</td><td th:text="${userDto.userid}"></td></tr>
+  <tr><td>이름</td><td th:text="${userDto.username}"></td></tr>
+  <tr><td>이메일</td><td th:text="${userDto.email}"></td></tr>
+</table>
+<form method="post" action="delete" name="deleteForm">
+  <input type="hidden" name="userid" th:value="${param.userid}">
+  비밀번호 : <input type="password" name="password">
+  <a href="javascript:document.deleteForm.submit()">[회원탈퇴]</a>
+</form></body></html>

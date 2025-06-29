@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+   th:replace=
+  "~{/layout/layout :: layout(~{::title}, ~{::body}, ~{::style})}">
+<head><meta charset="UTF-8">
+<title>로그인화면</title>
+</head><body>
+<h2>사용자 로그인</h2>
+<form th:object="${userDto}" 
+      method="post" action="login" name="loginform">
+<div th:if="${#fields.hasGlobalErrors()}">
+  <div th:each="err : ${#fields.globalErrors()}"
+      th:text="${err}" class="w3-text-red">Global Error</div>
+</div>
+<table>
+<tr><td>아이디</td>
+    <td><input type="text" name="userid" th:field="*{userid}" placeholder="아이디를 입력하세요"/>
+     <span th:if="${#fields.hasErrors('userid')}" th:errors="*{userid}"
+     class="w3-text-red">userid error</span></td></tr>
+<tr><td>비밀번호</td>
+        <td><input type="password" name="password" th:field="*{password}"/>
+      <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+        class="w3-text-red">password error</span></td></tr>
+<tr><td colspan="2" align="center">
+<input type="submit" value="로그인">
+<input type="button" value="회원가입"  onclick="location.href='join'">
+<input type="button" value="아이디찾기" onclick="win_open('idsearch')">
+<input type="button" value="비밀번호초기화" onclick="win_open('pwsearch')">
+</td></tr></table>
+<a th:href="${apiURL}">
+<img height="30" src="http://static.nid.naver.com/oauth/small_g_in.PNG"></a>
+</form>
+    <p th:if="${param.error != null}" style="color:red;">로그인 실패</p>
+    <p th:if="${param.logout != null}" style="color:blue;">로그아웃 완료</p>
+<script type="text/javascript">
+function win_open(page) {
+	   var op = "width=500, height=350, left=50,top=150";
+	   open(page ,"",op);
+}
+</script>
+</body></html>

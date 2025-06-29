@@ -42,10 +42,9 @@ import kr.gdu.service.ChatBotService;
 @RequestMapping("ajax")
 public class AjaxController {
 	@Autowired
-	ChatBotService chatService;
-	 
-	@Autowired
 	BoardService service;
+	@Autowired
+	ChatBotService chatService;
 
 	//produces="text/plain; charset=utf-8" : 전송될 데이터 형식
 	@PostMapping(value="uploadImage",produces="text/plain; charset=utf-8")
@@ -114,18 +113,15 @@ public class AjaxController {
 			                 new ArrayList<>(map.entrySet());
 	   return list;	 //[{2025-06-05=5},{2025-06-04=7},....]              
 	}
-	
-	// gpt
 	@PostMapping("gptquestion")
-	public String gptquestion (String question) {
-		String response = null;
-		try {
-			response = chatService.getChatGPTResponse(question);
-		} catch (URISyntaxException | IOException | InterruptedException e) {
-			e.printStackTrace();
-		}
-		System.out.println(response);
-		return response;
-	}
-	
+	public String qptquestion (String question) {
+      String response = null;
+	  try {
+		response = chatService.getChatGPTResponse(question);
+	  } catch (URISyntaxException | IOException | InterruptedException e) {
+		e.printStackTrace();
+	  }
+//	  System.out.println(response);
+	  return response;
+	}	
 }

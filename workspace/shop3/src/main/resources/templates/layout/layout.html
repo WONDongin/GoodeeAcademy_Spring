@@ -1,13 +1,19 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(title,content,style)">
+<html xmlns:th="http://www.thymeleaf.org"
+    th:fragment="layout(title,content,style)">
 <head>
-<title th:text="${'gdj90 | ' + #strings.substring(title, #strings.indexOf(title, '>') + 1, #strings.indexOf(title, '</'))}">TITLE</title>
+<title th:text="'gdj90 | '
+ + ${#strings.substring(title,#strings.indexOf(title,'>') + 1, #strings.indexOf(title, '</'))}">
+  TITLE
+</title>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</script>
+<!-- summernote 관련 설정  jquery, bootstrap 기능 사용 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
@@ -29,9 +35,11 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 	<th:block th:if="${session.loginUser == null}">
 	 <a th:href="@{/user/login}">로그인</a>
 	 <a th:href="@{/user/join}">회원가입</a>
-	</th:block>
+	</th:block>   
+	
 	<th:block th:if="${session.loginUser != null}">
-	<span th:text="${session.loginUser.username}"></span>님이 로그인 하셨습니다.&nbsp;&nbsp;
+	<span th:text="${session.loginUser.username}"></span>
+	님이 로그인 하셨습니다.&nbsp;&nbsp;
 	 <a th:href="@{/user/logout}">로그아웃</a>
 	</th:block>   
   </span>
@@ -40,32 +48,33 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
   <div class="w3-container">
     <div>
-      <img src="/image/logo.png" class="w3-margin-right"  id="goodeelogo">
+      <img src="/image/logo.png" 
+         class="w3-margin-right"  id="goodeelogo">
     </div><p>
     <div>
-		
-      <span th:if="${session.LoginUser != null}">반갑습니다, <strong><span th:text="${session.loginUser.username}"></span>님</strong></span><br>
-
+      <span th:if="${session.loginUser != null}">반갑습니다, 
+      <strong>
+         <span th:text="${session.loginUser.username}"></span>님</strong>
+      </span><br>
       <span th:if="${session.loginUser == null}">
-      <span><strong>로그인하세요</strong></span></span><br>
+      <strong>로그인하세요</strong></span><br>
     </div>
   </div>
   <hr>
   <div class="w3-bar-block">
     <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>&nbsp; Close Menu</a>
-    
+
     <th:block th:if="${session.loginUser != null}">
-	    <a th:href="@{/user/mypage(userid=${session.loginUser.userid})}" 
-	    class="w3-bar-item w3-button w3-padding">
-	    <i class="fa fa-users fa-fw"></i>&nbsp; 회원관리</a>
+    <a th:href="@{/user/mypage(userid=${session.loginUser.userid})}" 
+    class="w3-bar-item w3-button w3-padding ">
+    <i class="fa fa-users fa-fw"></i>&nbsp; 회원관리</a>
     </th:block>
-    
     <a href="/item/list" 
-    class="w3-bar-item w3-button w3-padding">
+    class="w3-bar-item w3-button w3-padding ">
     <i class="fa fa-eye fa-fw"></i>&nbsp; 상품관리</a>
     
     <a href="/chat/chat" 
-    class="w3-bar-item w3-button w3-padding">
+    class="w3-bar-item w3-button w3-padding ">
     <i class="fa fa-eye fa-fw"></i>&nbsp; 채팅하기</a>
     <hr>
     <a href="/board/list?boardid=1"
@@ -75,27 +84,24 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <a href="/board/list?boardid=2" 
     class="w3-bar-item w3-button w3-padding">
     <i class="fa fa-eye fa-fw"></i>&nbsp; 자유게시판</a>
-    
+
     <a href="/board/list?boardid=3" 
     class="w3-bar-item w3-button w3-padding">
     <i class="fa fa-eye fa-fw"></i>&nbsp; QnA</a>
   </div>
   <hr>
-  <!-- 챗봇 -->
-  <a href="/chat/chatbot" class="w3-bar-item w3-button w3-padding">
-  	<i class="fa fa-eye fa-fw"></i>&nbsp; 챗봇
-  </a>
+    <a href="/chat/chatbot" 
+    class="w3-bar-item w3-button w3-padding ">
+    <i class="fa fa-eye fa-fw"></i>&nbsp; 챗봇</a>
   <hr>
-  <!-- 네이버 검색 -->
-  <a href="/naver/search" class="w3-bar-item w3-button w3-padding">
-  	<i class="fa fa-eye fa-fw"></i>&nbsp; 네이버 검색
-  </a>
+    <a href="/naver/search" 
+    class="w3-bar-item w3-button w3-padding ">
+    <i class="fa fa-eye fa-fw"></i>&nbsp; 네이버 검색</a>      
   <br><br>
-  <!-- 수출입은행 환율 정보 표시 영역 
+  <!-- 수출입은행 환율 정보 표시 영역 -->
   <div style="width:100%;">
      <div id="exchange" style="width:70%; margin: 6px;"></div>
   </div>
-  -->
 </nav>
 
 <!-- Overlay effect when opening sidebar on small screens -->
@@ -105,9 +111,9 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 <div class="w3-main" style="margin-left:300px;margin-top:43px;">
 
   <div class="w3-panel">
-	<th:block th:replace="${content} ? ${content} : _"></th:block>
+  <br>
+   <th:block th:replace="${content} ? ${content} : _"></th:block>
   </div>
-  
   <!-- Header -->
   <header class="w3-container" style="padding-top:22px">
     <h5><b><i class="fa fa-dashboard"></i>게시판현황</b></h5>
@@ -188,10 +194,10 @@ function w3_close() {
  src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
 <script type="text/javascript">
   $(function(){
-//      goodeelogo()
+//    goodeelogo()
 //	  getSido1();
 //	  exchangeRate()  //수출입은행 환율정보 조회하기. 서버에서 HTML 형식(문자열)으로 리턴
-//	  exchangeRate2() //수출입은행 환율정보 조회하기. 서버에서 Map 형식(JOSN)으로 리턴
+//	  exchangeRate2() //수출입은행 환율정보 조회하기. 서버에서 Map 형식(JSON)으로 리턴
 //	  piegraph(2)     //글쓴이별 게시글 건수를 파이그래프로 출력.
 //	  barlinegraph(2) //작성 일자별 게시글 건수를 막대,선 그래프로 출력하기
   })

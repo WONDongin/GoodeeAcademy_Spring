@@ -71,6 +71,19 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+<!-- jsoup 설정 -->
+  	<dependency>
+  		<groupId>org.jsoup</groupId>
+  		<artifactId>jsoup</artifactId>
+  		<version>1.20.1</version>
+  	</dependency>
+<!-- json-simple 설정 -->
+    <dependency>
+       <groupId>com.googlecode.json-simple</groupId>
+       <artifactId>json-simple</artifactId>
+       <version>1.1.1</version>
+    </dependency>    	    
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

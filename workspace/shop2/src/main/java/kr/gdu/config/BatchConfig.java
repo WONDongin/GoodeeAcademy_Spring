@@ -9,10 +9,10 @@ import kr.gdu.util.CountScheduler;
 //Scheduling : 정기적인 작업을 실행하기
 
 @Configuration
-@EnableScheduling // scheduler 활성화
+@EnableScheduling //scheduler 활성화.
 public class BatchConfig {
 	@Bean
-	public CountScheduler countSchduler() { // CpuntScheduler 객체 생성
+	public CountScheduler countSchduler() { //CountScheduler 객체 생성. 
 		return new CountScheduler();
 	}
 }

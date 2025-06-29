@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+th:replace="~{/layout/layout :: layout(~{::title}, ~{::body}, ~{::style})}">
+<head>
+<meta charset="UTF-8">
+<title>회원 목록</title>
+<style>
+   .noline { text-decoration: none;}
+</style>
+</head>
+<body>
+<h2>회원목록</h2>
+<form action="mail" >
+  <table class="w3-table-all">
+  <tr><th>아이디</th><th>이름</th><th>전화</th><th>생일</th><th>이메일</th>
+  <th>&nbsp;</th>
+  <th><input type="checkbox" name="allchk" onchange="allchkbox(this)"></th></tr>
+  <tr th:each="user : ${list}">
+    <td th:text="${user.userid}"></td><td th:text="${user.username}"></td>
+    <td th:text="${user.phoneno}"></td>    
+  <td th:text="${#dates.format(user.birthday, 'yyyy-MM-dd')}"></td>
+  <td th:text="${user.email}"></td><td>  
+  <a th:href="@{../user/update(userid=${user.userid})}">수정</a>
+  <a th:href="@{../user/delete(userid=${user.userid})}">강제탈퇴</a>
+  <a th:href="@{../user/mypage(userid=${user.userid})}">회원정보</a></td>
+  <td><input type="checkbox" name="idchks" class="idchks" 
+      th:value="${user.userid}"></td></tr>
+  <tr><td colspan="7"><input type="submit" value="메일보내기"></td></tr>
+  </table></form>
+<script type="text/javascript">
+   function allchkbox(allchk) {
+	   $(".idchks").prop("checked",allchk.checked)
+   }
+</script>  
+  </body></html>

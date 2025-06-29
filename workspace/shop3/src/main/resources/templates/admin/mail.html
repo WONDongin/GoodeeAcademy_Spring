@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+th:replace="~{/layout/layout :: layout(~{::title}, ~{::body}, ~{::style})}">
+<head><meta charset="UTF-8">
+<title>메일 보내기</title>
+</head>
+<body><h2>메일보내기</h2>
+<form  method="post" action="mail" th:object="${mailDto}" name="mailform"
+enctype="multipart/form-data">
+   본인구글ID : <input type="text" name="googleid" class="w3-input" th:field="*{googleid}"/>
+    <span th:if="${#fields.hasErrors('googleid')}" th:errors="googleid"  class="w3-text-red">id error</span><br>
+   본인구글비밀번호 : <input type="password" name="googlepw" class="w3-input" th:field="*{googlepw}"/>
+    <span th:if="${#fields.hasErrors('googlepw')}" th:errors="googlepw"  class="w3-text-red">id error</span><br>
+<table class="w3-table">
+ <tr><td>보내는사람</td><td th:text="${session.loginUser.username}"></td></tr>
+ <tr><td>받는사람</td>
+ <td><input type="text" name="recipient" class="w3-input" 
+    th:field="*{recipient}"/></td></tr>
+ <tr><td>제목</td>
+ <td><input type="text" name="title" class="w3-input" th:field="*{title}"/>
+  <span th:if="${#fields.hasErrors('title')}" th:errors="title"  class="w3-text-red">id error</span></td></tr>
+ <tr><td>메시지형식</td><td><select name="mtype" class="w3-input">
+  <option value="text/html; charset=utf-8">HTML</option>
+  <option value="text/plain; charset=utf-8">TEXT</option></select></td></tr>
+<tr><td>첨부파일1</td><td><input type="file" name="file1"></td></tr>
+<tr><td>첨부파일2</td><td><input type="file" name="file1"></td></tr>
+<tr><td colspan="2"><textarea name="contents" cols="120" id="contents" 
+    rows="10" class="w3-input" th:value="${contents}"></textarea>
+  <span th:if="${#fields.hasErrors('contents')}" th:errors="contents"  class="w3-text-red">id error</span>
+ </td></tr>
+<tr><td colspan="2"><input type="submit" value="메일보내기"></td></tr>
+</table></form>
+<script type="text/javascript">
+   $(function() {
+	   $("#contents").summernote({
+		   height:300,
+		   placeholder : "메일로 전송할 내용을 입력해 주세요",
+		   focus : true,
+		   lang : "ko-KR",
+		   toolbar :[   //image 버튼 제거 
+			   ['style', ['bold', 'italic', 'underline', 'clear']],
+			    ['font', ['strikethrough', 'superscript', 'subscript']],
+			    ['fontsize', ['fontsize']],
+			    ['color', ['color']],
+			    ['para', ['ul', 'ol', 'paragraph']],
+			    ['height', ['height']]			   
+		   ]
+	   })
+   })
+</script>
+</body></html>

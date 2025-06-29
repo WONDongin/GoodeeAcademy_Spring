@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,17 +12,25 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import kr.gdu.logic.Item;
+import kr.gdu.domain.Item;
+import kr.gdu.domain.Sale;
+import kr.gdu.domain.SaleItem;
+import kr.gdu.domain.User;
+import kr.gdu.dto.CartDto;
+import kr.gdu.dto.ItemDto;
+import kr.gdu.dto.ItemSetDto;
 import kr.gdu.repository.ItemRepository;
+import kr.gdu.repository.SaleItemRepository;
+import kr.gdu.repository.SaleRepository;
 
 @Service  //@Component + Service : 객체화 + 서비스기능
 public class ShopService {
 	@Autowired //ItemDao 객체를 주입
 	private ItemRepository itemDao;
-//	@Autowired 
-//	private SaleDao saleDao;
-//	@Autowired
-//	private SaleItemDao saleItemDao;	
+	@Autowired 
+	private SaleRepository saleDao;
+	@Autowired
+	private SaleItemRepository saleItemDao;	
 //	@Autowired
 //	private ExchangeDao exDao;	
 	
@@ -32,7 +41,7 @@ public class ShopService {
 		//Optional<Item> findById(id)
 		return itemDao.findById(id).get();
 	}	
-	public void itemCreate(Item item, HttpServletRequest request) {
+	public void itemCreate(ItemDto item, HttpServletRequest request) {
 		//item.getPicture() : 업로드된 파일이 존재. 파일의 내용 저장
 		if(item.getPicture() != null && !item.getPicture().isEmpty()) {
 			//업로드 폴더 지정
@@ -42,7 +51,7 @@ public class ShopService {
 		}
 		int maxid = itemDao.findMaxId(); //db에서 id의 최대값 조회
 		item.setId(maxid + 1); //
-		itemDao.save(item); //insert, update 기능
+		itemDao.save(new Item(item)); //insert, update 기능
 	}
 	//파일 업로드하기
 	private void uploadFileCreate(MultipartFile picture, String path) {
@@ -57,54 +66,49 @@ public class ShopService {
 			e.printStackTrace();
 		}
 	}
-/*	
-	public void itemUpdate(Item item, HttpServletRequest request) {
+	public void itemUpdate(ItemDto item, HttpServletRequest request) {
 		if(item.getPicture() != null && !item.getPicture().isEmpty()) {
-			String path = request.getServletContext().getRealPath("/")+"img/";
-			uploadFileCreate(item.getPicture(),path);
-			item.setPictureUrl(item.getPicture().getOriginalFilename());
+		  String path = request.getServletContext().getRealPath("/")+"img/";
+		  uploadFileCreate(item.getPicture(),path);
+		  item.setPictureUrl(item.getPicture().getOriginalFilename());
 		}
-		itemDao.update(item);
+		itemDao.save(new Item(item));	//수정	
 	}
-
 	public void itemDelete(Integer id) {
-		itemDao.delete(id);
+		itemDao.deleteById(id); //
 	}
-	public Sale checkend(User loginUser, Cart cart) { 	
+	public Sale checkend(User loginUser, CartDto cart) { 	
 	    int maxsaleid = saleDao.getMaxSaleId(); //최종 주문번호 조회
 	    Sale sale = new Sale();
 	    sale.setSaleid(maxsaleid+1); //최종주문번호 + 1
 	    sale.setUser(loginUser); //주문자 정보
 	    sale.setUserid(loginUser.getUserid()); //db의 userid값으로 저장
-	    saleDao.insert(sale); //sale 테이블에 추가 
+	    saleDao.save(sale); //sale 테이블에 추가 
 	    int seq = 0;
-	    //ItemSet : Item 객체, 수량
-	    for(ItemSet is : cart.getItemSetList()) {
-	    	//sale.getSaleid() : 주문번호
-	    	//++seq : 주문상품 번호
+	    for(ItemSetDto is : cart.getItemSetList()) {
 	    	SaleItem saleItem = new SaleItem(sale.getSaleid(),++seq,is);
 	    	sale.getItemList().add(saleItem);
-	    	saleItemDao.insert(saleItem);
+	    	saleItemDao.save(saleItem);
 	    }
 		return sale; //주문정보, 고객정보, 주문상품
 	}
-
 	public List<Sale> saleList(String userid) {
 		//list : Sale 목록. db 정보만 저장
-		List<Sale> list = saleDao.list(userid); //userid 사용자가 주문정보목록
+		List<Sale> list = saleDao.findByUserid(userid); //userid 사용자가 주문정보목록
 		for(Sale sa : list) {
 			//saleItemList : 주문번호에 맞는 주문 상품 목록. db 정보만 조회
-			List<SaleItem> saleItemList = saleItemDao.list(sa.getSaleid());
+			List<SaleItem> saleItemList = 
+					 saleItemDao.findBySaleid(sa.getSaleid());
 			for(SaleItem si : saleItemList) {
 				//상품번호에 해당하는 상품조회
-				Item item = itemDao.select(si.getItemid());
+				Item item = itemDao.findById(si.getItemid()).orElse(null);
 				si.setItem(item); //주문상품(SaleItem)에 상품정보 저장.
 			}
 			sa.setItemList(saleItemList); //주문정보(Sale)에 주문상품 저장
 		}
 		return list; //db정보, SaleItem(주문상품)정보
 	}
-
+/*
 	public void exchangeCreate() {
 		Document doc = null;
 		List<List<String>> trlist = new ArrayList<>();
@@ -140,15 +144,4 @@ public class ShopService {
 		}		
 	}
 */
-	public void itemUpdate(@Valid Item item, HttpServletRequest request) {
-		if(item.getPicture() != null && !item.getPicture().isEmpty()) {
-		  String path = request.getServletContext().getRealPath("/")+"img/";
-		  uploadFileCreate(item.getPicture(),path);
-		  item.setPictureUrl(item.getPicture().getOriginalFilename());
-		}
-		itemDao.save(item);	//수정	
-	}
-	public void itemDelete(Integer id) {
-		itemDao.deleteById(id); //
-	}
 }

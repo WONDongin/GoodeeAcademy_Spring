@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+   th:replace=
+  "~{/layout/layout :: layout(~{::title}, ~{::body}, ~{::style})}">
+<head>
+<meta charset="UTF-8">
+<title>사용자등록</title>
+</head>
+<body>
+<h2>사용자 등록</h2>
+<form th:object="${userDto}" method="post" action="join">
+<div th:if="${#fields.hasGlobalErrors()}">
+  <div th:each="err : ${#fields.globalErrors()}"
+      th:text="${err}" class="w3-text-red">Global Error</div>
+</div>
+<table>
+   <tr><td>아이디</td>
+       <td><input type="text" name="userid" th:field="*{userid}" placeholder="아이디를 입력하세요"/>
+        <span th:if="${#fields.hasErrors('userid')}" th:errors="*{userid}"
+        class="w3-text-red">userid error</span></td></tr>
+   <tr><td>비밀번호</td>
+        <td><input type="password" name="password" th:field="*{password}"/>
+      <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+        class="w3-text-red">password error</span></td></tr>
+   <tr><td>이름</td>
+       <td><input type="input" name="username" th:field="*{username}" />
+      <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
+        class="w3-text-red">username error</span></td></tr>
+   <tr><td>전화번호</td><td><input type="text" name="phoneno" /></td></tr>
+   <tr><td>우편번호</td><td><input type="text" name="postcode" /></td></tr>
+   <tr><td>주소</td><td><input type="text" name="address" /></td></tr>
+   <tr><td>이메일</td>
+        <td><input type="text" name="email" />
+      <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+        class="w3-text-red">email error</span></td></tr>
+   <tr><td>생년월일</td>
+      <td><input type="text" name="birthday" placeholder="yyyy-MM-dd"/>
+      <span th:if="${#fields.hasErrors('birthday')}" th:errors="birthday"
+        class="w3-text-red">birthday error</span></td></tr>
+   <tr><td><input type="submit" value="회원가입">
+           <input type="reset" value="초기화">
+   </td></tr></table></form></body></html>

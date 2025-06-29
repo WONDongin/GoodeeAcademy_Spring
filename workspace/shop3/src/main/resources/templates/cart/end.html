@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+th:replace="~{/layout/layout :: layout(~{::title}, ~{::body}, ~{::style})}">
+<head>
+<meta charset="UTF-8">
+<title>주문완료</title>
+</head><body>
+<h2><span th:text="${sale.user.username}"></span>님이 주문하신 정보 입니다.</h2>
+<h2>배송지 정보</h2>
+<table>
+<tr><td width="30%">주문아이디</td>
+    <td width="70%" th:text="${session.loginUser.userid}"></td></tr>
+<tr><td width="30%">이름</td>
+    <td width="70%" th:text="${session.loginUser.username}"></td></tr>
+<tr><td width="30%">우편번호</td>
+    <td width="70%" th:text="${session.loginUser.postcode}"></td></tr>
+<tr><td width="30%">주소</td>
+    <td width="70%" th:text="${session.loginUser.address}"></td></tr>
+<tr><td width="30%">전화번호</td>
+    <td width="70%" th:text="${session.loginUser.phoneno}"></td></tr>
+</table>
+<h2>주문 상품</h2>
+<table>
+  <tr><th>상품명</th><th>가격</th><th>수량</th><th>합계금액</th></tr>
+   <tr th:each="saleitem : ${sale.itemList}">
+    <td th:text="${saleitem.item.name}"></td>
+    <td><span th:text="${#numbers.formatDecimal(saleitem.item.price, 0, 'COMMA', 0, 'POINT')}">0</span>원</td>
+    <td th:text="${saleitem.quantity}"></td>
+    <td><span th:text="${#numbers.formatDecimal(saleitem.item.price * saleitem.quantity, 0, 'COMMA', 0, 'POINT')}">0</span>원</td>
+  </tr>
+  <tr><td colspan="4" align="right">
+  총 주문금액 :
+  <span th:text="${#numbers.formatDecimal(sale.total, 0, 'COMMA', 0, 'POINT')}">0</span>   
+  </td></tr>
+  <tr><td colspan="4"><a href="../item/list">상품 목록</a>
+  </td></tr>
+</table></body></html>

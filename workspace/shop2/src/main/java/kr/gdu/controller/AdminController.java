@@ -1,7 +1,5 @@
 package kr.gdu.controller;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 
 import jakarta.servlet.http.HttpSession;
@@ -68,8 +66,7 @@ public class AdminController {
 		//첨부 파일 제거하기
 		service.mailfileDelete(mail);
 		return mav;
-	}
-
+	}	
 }
 
 

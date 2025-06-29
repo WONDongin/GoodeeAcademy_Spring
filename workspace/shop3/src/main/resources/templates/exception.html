@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<!-- /main/resources/templates/exception.html -->
+<html xmlns:th="http://www.thymeleaf.org">
+<script th:inline="javascript"> 
+//th:inline : 자바스크립트에서 태그 사용가능
+  alert([[${exception.message}]]);
+  location.href=[[${exception.url}]];
+</script> 
+</html>

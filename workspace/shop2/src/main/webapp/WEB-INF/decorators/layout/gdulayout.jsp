@@ -91,20 +91,19 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <i class="fa fa-eye fa-fw"></i>&nbsp; QnA</a>
   </div>
   <hr>
-  <!-- 챗봇 -->
-  <a href="${path}/chat/chatbot" class="w3-bar-item w3-button w3-padding">
-  	<i class="fa fa-eye fa-fw"></i>&nbsp; 챗봇
-  </a>
+    <a href="" 
+    class="w3-bar-item w3-button${path}/chat/chatbot w3-padding ">
+    <i class="fa fa-eye fa-fw"></i>&nbsp; 챗봇</a>
   <hr>
-  <!-- 네이버 검색 -->
-  <a href="${path}/naver/search" class="w3-bar-item w3-button w3-padding">
-  	<i class="fa fa-eye fa-fw"></i>&nbsp; 네이버 검색
-  </a>
+    <a href="${path}/naver/search" 
+    class="w3-bar-item w3-button w3-padding ">
+    <i class="fa fa-eye fa-fw"></i>&nbsp; 네이버 검색</a>      
   <br><br>
-  <!-- 수출입은행 환율 정보 표시 영역 -->
+  <%-- 수출입은행 환율 정보 표시 영역 --%>
   <div style="width:100%;">
      <div id="exchange" style="width:70%; margin: 6px;"></div>
   </div>
+  
 </nav>
 
 <!-- Overlay effect when opening sidebar on small screens -->
@@ -196,7 +195,7 @@ function w3_close() {
  src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
 <script type="text/javascript">
   $(function(){
-      goodeelogo()
+//      goodeelogo()
 //	  getSido1();
 //	  exchangeRate()  //수출입은행 환율정보 조회하기. 서버에서 HTML 형식(문자열)으로 리턴
 //	  exchangeRate2() //수출입은행 환율정보 조회하기. 서버에서 Map 형식(JOSN)으로 리턴

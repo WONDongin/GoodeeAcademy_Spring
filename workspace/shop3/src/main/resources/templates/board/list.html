@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+th:replace="~{/layout/layout :: layout(~{::title}, ~{::body}, ~{::style})}">
+<head>
+<meta charset="UTF-8">
+<title th:text="${boardName}"></title>
+</head><body>
+<h2 th:text="${boardName}"></h2>
+<table class="w3-table-all w3-border">
+  <tr>
+    <form action="list" method="post" name="searchform">
+  <td>
+      <input type="hidden" name="pageNum" value="1">
+      <input type="hidden" name="boardid" th:value="${param.boardid}">
+      <select name="searchtype"  class="w3-select">
+      <option value="">선택하세요</option>
+      <option value="title">제목</option>
+      <option value="writer">작성자</option>
+      <option value="content">내용</option></select>
+      <script th:inline="javascript">
+            searchform.searchtype.value=[[${param.searchtype}]];
+      </script></td>
+      <td colspan="3"><input type="text" name="searchcontent"
+         th:value="${param.searchcontent }" class="w3-input"></td>
+         <td><input type="submit" value="검색" class="w3-btn w3-blue">
+         <input type="button" value="전체게시물보기" class="w3-btn w3-blue"  
+           th:onclick="|location.href='@{list(boardid=${boardid})}'|" >
+      </td></form></tr> <!-- 검색 폼 -->
+      
+      <th:block th:if="${listcount > 0}"> 
+     <tr>
+       <td colspan="5" class="w3-right-align" >글개수:
+                              <span th:text="${listcount}"></span></td></tr>
+     <tr><th>번호</th><th>제목</th><th>글쓴이</th><th>날짜</th><th>조회수</th></tr>
+<!--
+    th:each 에서 stat 객체의 멤버
+      stat.index : 0부터 시작 반복인덱스
+      stat.count : 0부터 시작 반복순서
+      stat.size  : 전체 리스트의 요소의 갯수.
+      stat.current : 현재 요소.board와 동일
+      stat.even  : 짝수 인덱스 ? (true/false 리턴)
+          th:if="${stat.even}"...
+      stat.odd   : 홀수 인덱스 ? (true/false 리턴)
+      stat.first : 처음 요소?  (true/false 리턴)
+      stat.last  : 마지막 요소?  (true/false 리턴)
+ -->
+      <tr th:each="board,stat : ${boardlist}">
+        <td th:text="${stat.count}"></td>
+      <td class="w3-left">
+        <th:block th:if="${board.file1 != null}">
+        <a th:href="@{'file/' + ${board.file1}}">@</a>
+        </th:block>
+        <th:block th:if="${board.file1 == null}">
+            &nbsp;&nbsp;&nbsp;
+        </th:block>
+       <span th:each="i : ${#numbers.sequence(1, board.grplevel)}">&nbsp;&nbsp;</span>        
+      <th:block th:if="${board.grplevel > 0}">└</th:block>
+<a th:href="@{detail(num=${board.num})}"><span th:text="${board.title}"></span></a></td>
+      <td th:text="${board.writer}"></td>
+   <td><span th:if="${#dates.format(board.regdate, 'yyyyMMdd') == today}"
+             th:text="${#dates.format(board.regdate, 'HH:mm:ss')}"></span>
+      <span th:if="${#dates.format(board.regdate, 'yyyyMMdd') != today}"
+            th:text="${#dates.format(board.regdate, 'yyyy-MM-dd HH:mm')}"></span>
+   </td>
+   <td th:text="${board.readcnt}"></td></tr> <!-- 게시물 출력 -->
+   
+   <tr><td colspan="5" class="w3-center">
+      <th:block th:if="${pageNum > 1}">
+       <a th:href="|javascript:listpage('${pageNum - 1}')|">[이전]</a>
+      </th:block>
+         <th:block th:if="${pageNum <= 1}">[이전]</th:block>
+	<span th:each="a : ${#numbers.sequence(startpage, endpage)}">
+    	<span th:if="${a == pageNum}">[[${a}]]</span>
+    	<a th:if="${a != pageNum}" 
+    	   th:href="|javascript:listpage('${a}')|">[[${a}]]</a>
+	</span>
+     <span th:if="${maxpage > pageNum}">
+       <a th:href="|javascript:listpage('${pageNum + 1}')|">[다음]</a></span>
+     <span th:if="${pageNum >= maxpage}">[다음]</span></td></tr>
+     </th:block>
+   <tr th:if="${listcount == 0}"><td colspan="5">등록된 게시물이 없습니다.</td></tr>
+   <tr><td colspan="5">
+<a th:href="@{write(boardid=${boardid})}" class="w3-right">[글쓰기]</a></td></tr>
+</table>
+<script type="text/javascript">
+function listpage(page) {
+	document.searchform.pageNum.value=page;
+	document.searchform.submit();
+}
+</script>
+</body></html>

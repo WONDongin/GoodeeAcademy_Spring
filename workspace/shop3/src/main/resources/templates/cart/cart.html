@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+th:replace="~{/layout/layout :: layout(~{::title}, ~{::body}, ~{::style})}">
+<head><meta charset="UTF-8">
+<title>장바구니</title></head>
+<body><h2>장바구니</h2>
+<table class="w3-table"><tr><td colspan="4">장바구니 상품 목록</td></tr>
+  <tr><th>상품명</th><th>가격</th><th>수량</th><th>합계</th></tr>
+  <!-- itemset : List의 요소의미. ItemSet 객체
+       stat : 요소의 상태. index:0부터시작. 
+   -->
+<tr th:each="itemset,stat : ${cart.itemSetList}">
+   <td th:text="${itemset.item.name}"></td>
+   <td><span th:text=
+"${#numbers.formatDecimal(itemset.item.price, 0, 'COMMA', 0, 'POINT')}">0</span>원</td>
+   <td><span th:text=
+"${#numbers.formatDecimal(itemset.quantity, 0, 'COMMA', 0, 'POINT')}">0</span></td>
+<td><span th:text=
+"${#numbers.formatDecimal(itemset.quantity * itemset.item.price, 0, 'COMMA', 0, 'POINT')}">0</span>   
+<a th:href="@{cartDelete(index=${stat.index})}">ⓧ</a></td></tr>
+</c:forEach>
+<tr><td colspan="4" align="right">총 구입 금액 :
+<span th:text="${#numbers.formatDecimal(cart.total, 0, 'COMMA', 0, 'POINT')}">0</span>
+</table><br><div th:text="${message }"></div><br>
+<a href="../item/list">상품목록</a>
+<a href="checkout">주문하기</a></body></html>

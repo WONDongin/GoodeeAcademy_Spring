@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import kr.gdu.logic.Item;
+import kr.gdu.domain.Item;
+import kr.gdu.dto.ItemDto;
 import kr.gdu.service.ShopService;
 
 @Controller   //@Component + Controller 기능. 객체화됨
@@ -39,11 +40,11 @@ public class ItemController {
 	@GetMapping("create")  //Get 방식 요청
 	public ModelAndView create() {
 		ModelAndView mav = new ModelAndView();
-		mav.addObject(new Item());
+		mav.addObject(new ItemDto());
 		return mav;
 	}
 	@PostMapping("create") //Post 방식 요청
-	public ModelAndView register(@Valid Item item,BindingResult bresult,
+	public ModelAndView register(@Valid ItemDto item,BindingResult bresult,
 			HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView();
 		if(bresult.hasErrors()) { //입력값 검증시 오류 발생
@@ -55,7 +56,7 @@ public class ItemController {
 		return mav;
 	}
 	@PostMapping("update")
-	public ModelAndView update(@Valid Item item, BindingResult bresult, 
+	public ModelAndView update(@Valid ItemDto item, BindingResult bresult, 
 			HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView();
 		if(bresult.hasErrors()) {
@@ -73,4 +74,5 @@ public class ItemController {
 		service.itemDelete(id);
 		return "redirect:list"; //뷰선택
 	}
+	
 }

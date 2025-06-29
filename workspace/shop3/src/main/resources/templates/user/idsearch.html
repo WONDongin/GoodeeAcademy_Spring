@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8">
+<title>아이디찾기</title>
+</head><body><h3>아이디찾기</h3>
+<form  method="post" action="idsearch" th:object="${userDto}">
+<div th:if="${#fields.hasGlobalErrors()}">
+    <div th:each="err : ${#fields.globalErrors()}"
+        th:text="${err}" style="color:red">Global Error</div>
+</div>  
+<table><tr><th>이메일</th><td><input type="text" name="email">
+    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" 
+    style="color:red">email error</span></td></tr>
+ <tr><th>전화번호</th><td><input type="text" name="phoneno">
+    <span th:if="${#fields.hasErrors('phoneno')}" th:errors="*{phoneno}"
+          style="color:red">phoneno error</span></td></tr>
+ <tr><td colspan="2">
+ <input type="submit" value="아이디찾기"></td></tr></table>
+</form></body></html>
