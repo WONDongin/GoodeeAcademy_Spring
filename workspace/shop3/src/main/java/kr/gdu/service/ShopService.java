@@ -108,40 +108,38 @@ public class ShopService {
 		}
 		return list; //db정보, SaleItem(주문상품)정보
 	}
-/*
-	public void exchangeCreate() {
-		Document doc = null;
-		List<List<String>> trlist = new ArrayList<>();
-		String url = "https://www.koreaexim.go.kr/wg/HPHKWG057M01";
-		String exdate = null;
-		try {
-			doc = Jsoup.connect(url).get();
-			Elements trs = doc.select("tr"); 
-			exdate = doc.select("p.table-unit").html();
-			// 조회기준일 : 2025-06-23
-			exdate = exdate.substring(exdate.indexOf(":")+2);
-			for(Element tr : trs) {
-				List<String> tdlist = new ArrayList<>();
-				Elements tds = tr.select("td");
-				for(Element td : tds) {
-					tdlist.add(td.html()); 
-				}
-			    if (tdlist.size() > 0) {
-				    trlist.add(tdlist);
-			    }
-			 }
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
-		for(List<String> tds : trlist) {
-			Exchange ex = new Exchange
-					(0,tds.get(0),tds.get(1), //1235.12
-					 Float.parseFloat(tds.get(2).replace(",", "")),
-					 Float.parseFloat(tds.get(3).replace(",", "")),
-					 Float.parseFloat(tds.get(4).replace(",", "")),
-                    exdate.trim());
-			exDao.insert(ex);
-		}		
-	}
-*/
+//	public void exchangeCreate() {
+//		Document doc = null;
+//		List<List<String>> trlist = new ArrayList<>();
+//		String url = "https://www.koreaexim.go.kr/wg/HPHKWG057M01";
+//		String exdate = null;
+//		try {
+//			doc = Jsoup.connect(url).get();
+//			Elements trs = doc.select("tr"); 
+//			exdate = doc.select("p.table-unit").html();
+//			// 조회기준일 : 2025-06-23
+//			exdate = exdate.substring(exdate.indexOf(":")+2);
+//			for(Element tr : trs) {
+//				List<String> tdlist = new ArrayList<>();
+//				Elements tds = tr.select("td");
+//				for(Element td : tds) {
+//					tdlist.add(td.html()); 
+//				}
+//			    if (tdlist.size() > 0) {
+//				    trlist.add(tdlist);
+//			    }
+//			 }
+//		} catch(IOException e) {
+//			e.printStackTrace();
+//		}
+//		for(List<String> tds : trlist) {
+//			Exchange ex = new Exchange
+//					(0,tds.get(0),tds.get(1), //1235.12
+//					 Float.parseFloat(tds.get(2).replace(",", "")),
+//					 Float.parseFloat(tds.get(3).replace(",", "")),
+//					 Float.parseFloat(tds.get(4).replace(",", "")),
+//                    exdate.trim());
+//			exDao.insert(ex);
+//		}		
+//	}
 }

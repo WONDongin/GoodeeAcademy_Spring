@@ -24,13 +24,13 @@
    </td></tr>
    <tr><td colspan="2">
      <a th:href="@{reply(num=${board.num},boardid=${board.boardid})}">[답변]</a>
-     <a th:href="@{update(num=${board.num},boardid=${board.boardid}}">[수정]</a>
-     <a th:href="@{delete(num=${board.num},boardid=${board.boardid}}">[삭제]</a>
+     <a th:href="@{update(num=${board.num},boardid=${board.boardid})}">[수정]</a>
+     <a th:href="@{delete(num=${board.num},boardid=${board.boardid})}">[삭제]</a>
      <a th:href="@{list(boardid=${board.boardid})}">[게시물목록]</a>
    </td></tr></table>
   <span id="comment"></span> 
-  <form th:object="${comment}" action="comment"  method="post" name="commForm">
-  <input type="hidden"  th:filed="*{num}" />
+  <form th:object="${commentDto}" action="comment"  method="post" name="commForm">
+  <input type="hidden"  name="num" th:value="${board.num}"/>
   <div class="w3-row">
     <div class="w3-col s2  w3-center">
      <p><input type="text" name="writer" class="w3-input w3-border" 
@@ -64,7 +64,7 @@
       <td th:text="${c.content}"></td>
      <td th:text="${#dates.format(c.regdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
     <td class="w3-right">
-    <form action="commdel" method="post" th:name="commdel${stat.index}">
+    <form action="commdel" method="post" th:name="${'commdel'+stat.index}">
     <input type="hidden" name="num" th:value="${c.num}">    
     <input type="hidden" name="seq" th:value="${c.seq}">    
     <input type="password" name="pass" placeholder="비밀번호">

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<!--  resources/templates/login.html -->
+<html xmlns:th="http://www.thymeleaf.org"> 
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h3>로그인 페이지</h3>
+<form action="/loginProc" method="post" name="loginForm">
+  <input type="text" name="username" placeholder="id" /><br>
+  <input type="password" name="password" placeholder="password" />
+  <input type="submit" value="로그인" />
+</form>
+</body>
+</html>

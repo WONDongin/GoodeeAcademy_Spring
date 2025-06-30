@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+th:replace="~{/layout/layout :: layout(~{::title}, ~{::body}, ~{::style})}">
+<head><meta charset="UTF-8">
+<title>게시판 삭제 화면</title></head>
+<body>
+<form  th:object="${boardDto}" action="delete"  method="post"  name="f">
+
+<div th:if="${#fields.hasGlobalErrors()}">
+  <div th:each="err : ${#fields.globalErrors()}"
+      th:text="${err}" class="w3-text-red">Global Error</div>
+</div>
+
+<input type="hidden" name="num" th:value="${param.num}">
+<input type="hidden" name="boardid" th:value="${param.boardid}">
+<table class="w3-table-all">
+    <caption><span th:text="${boardName}"></span>글 삭제 화면</caption>
+    <tr><td>제목</td><td th:text="${boardDto.title}"></td></tr>
+	<tr><td>게시글비밀번호</td>
+		<td><input type="password" name="pass" class="w3-input w3-border" /></td></tr>
+	<tr><td colspan="2">
+<a href="javascript:document.f.submit()">[게시글삭제]</a></td></tr>
+</table></form></body></html>
